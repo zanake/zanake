@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@zanake/arr": ["packages/arr/src/index.ts"],
+      "@zanake/fmt": ["packages/fmt/src/index.ts"],
+      "@zanake/str": ["packages/str/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
