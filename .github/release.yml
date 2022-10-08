@@ -1,0 +1,53 @@
+name: Release Pipeline
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm clean-install
+      - run: npm build
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+          scope: '@zanake'
+      - run: |
+          for pkg in $(find ./dist/packages/* -maxdepth 0 -type d);
+            do (
+              echo "Publishing : $pkg";
+              cd "$pkg";
+              npm publish --access public;
+            );
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_REGISTRY_TOKEN}}
+
+  # publish-github:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12
+  #         registry-url: https://npm.pkg.github.com/
+  #         scope: '@cowrie-io'
+  #     - run: npm ci
+  #     - run: "node -p 'const pkg = require(`./package.json`); const data = {...pkg, name: `@cowrie-io/cowrie`, publishConfig: {registry: `https://npm.pkg.github.com/`}}; require(`fs`).writeFileSync(`./package.json`, JSON.stringify(data));'"
+  #     - run: npm publish
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{secrets.PUBLISH_TO_GITHUB_PACKAGES_TOKEN}}
