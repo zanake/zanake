@@ -1,1 +1,3 @@
-export * from './lib/mdx-meta';
+import pkg from './lib/mdx-meta';
+
+export default pkg;
