@@ -3,10 +3,13 @@
     "name": "zanake",
     "version": "0.0.0",
     "scripts": {
-        "build": "nx run-many --target=build --projects=arr,fmt,str --parallel=3"
+        "test": "nx run-many --target=test --projects=arr,fmt,str,mdx-meta --parallel=4",
+        "build": "nx run-many --target=build --projects=arr,fmt,str,mdx-meta --parallel=4"
     },
     "private": true,
     "dependencies": {
+        "@mdx-js/mdx": "^2.1.5",
+        "glob": "^8.0.3",
         "tslib": "^2.3.0"
     },
     "devDependencies": {
@@ -17,8 +20,12 @@
         "@nrwl/linter": "14.8.2",
         "@nrwl/nx-cloud": "latest",
         "@nrwl/workspace": "14.8.2",
+        "@types/glob": "^8.0.0",
         "@types/jest": "28.1.1",
+        "@types/mdx": "^2.0.3",
         "@types/node": "16.11.7",
+        "@types/react": "^18.0.21",
+        "@types/react-dom": "^18.0.6",
         "@typescript-eslint/eslint-plugin": "^5.36.1",
         "@typescript-eslint/parser": "^5.36.1",
         "eslint": "~8.15.0",

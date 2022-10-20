@@ -1,10 +1,6 @@
 # Zanake
 
-This project was generated using [Nx](https://nx.dev).
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
-
-🔎 **Smart, Fast and Extensible Build System**
+This project was generated using [Nx](https://nx.dev) which helps developers build **💭 smart**, **⚡ fast** and **👐 extensible** build systems
 
 ## Adding capabilities to your workspace
 
@@ -12,7 +8,7 @@ Nx supports many plugins which add capabilities for developing different types o
 
 These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
 
-Below are our core plugins:
+Below are their core plugins:
 
 - [React](https://reactjs.org)
   - `npm install --save-dev @nrwl/react`
@@ -22,6 +18,8 @@ Below are our core plugins:
   - `npm install --save-dev @nrwl/angular`
 - [Nest](https://nestjs.com)
   - `npm install --save-dev @nrwl/nest`
+- [Next]https://nextjs.org/)
+  - `npm install --save-dev @nrwl/next`
 - [Express](https://expressjs.com)
   - `npm install --save-dev @nrwl/express`
 - [Node](https://nodejs.org)
@@ -29,13 +27,23 @@ Below are our core plugins:
 
 There are also many [community plugins](https://nx.dev/community) you could add.
 
+## Generators
+
+> They allow you to create multiple applications and libraries in the same workspace.
+
+| Plugin        | Command                                                                  | Description     |
+| :------------ | :----------------------------------------------------------------------- | :-------------- |
+| `@nrwl/react` | `nx g @nrwl/react:app my-app`                                            | ReactJS SPA     |
+| `@nrwl/react` | `nx g @nrwl/react:lib my-lib`                                            | React component |
+| `@nrwl/react` | `nx generate @nrwl/js:lib my-pkg --publishable --importPath=@org/my-pkg` | React component |
+
 ## Generate an application
 
 Run `nx g @nrwl/react:app my-app` to generate an application.
 
 > You can use any of the plugins above to generate applications as well.
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+When using Nx,
 
 ## Generate a library
 
