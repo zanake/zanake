@@ -1,25 +1,25 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@zanake/arr": ["packages/arr/src/index.ts"],
-      "@zanake/fmt": ["packages/fmt/src/index.ts"],
-      "@zanake/mdx-meta": ["packages/mdx-meta/src/index.ts"],
-      "@zanake/str": ["packages/str/src/index.ts"]
-    }
-  },
-  "exclude": ["node_modules", "tmp"]
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es2015",
+        "module": "esnext",
+        "lib": ["es2017", "dom"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@zanake/arr": ["packages/arr/src/index.ts"],
+            "@zanake/fmt": ["packages/fmt/src/index.ts"],
+            "@zanake/mdx": ["packages/mdx/src/index.ts"],
+            "@zanake/str": ["packages/str/src/index.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
 }

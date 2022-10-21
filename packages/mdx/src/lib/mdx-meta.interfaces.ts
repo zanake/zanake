@@ -8,7 +8,6 @@ export interface Label {
     href: string;
 }
 
-
 export interface Artist {
     name: string;
     profile: string;
