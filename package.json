@@ -3,8 +3,8 @@
     "name": "zanake",
     "version": "0.0.0",
     "scripts": {
-        "test": "nx run-many --target=test --projects=arr,fmt,str,mdx-meta --parallel=4",
-        "build": "nx run-many --target=build --projects=arr,fmt,str,mdx-meta --parallel=4"
+        "test": "nx run-many --target=test --projects=arr,fmt,str,mdx --parallel=4",
+        "build": "nx run-many --target=build --projects=arr,fmt,str,mdx --parallel=4"
     },
     "private": true,
     "dependencies": {

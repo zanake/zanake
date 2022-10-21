@@ -10,6 +10,9 @@ export default {
     transform: {
         '^.+\\.[tj]s$': 'ts-jest',
     },
+    transformIgnorePatterns: [
+      "<rootDir>/node_modules/(?!@mdx-js/mdx)"
+    ],
     moduleFileExtensions: ['ts', 'js', 'html'],
     coverageDirectory: '../../coverage/packages/mdx',
 };

@@ -5,9 +5,14 @@ import { promises as fs } from 'fs';
 import { toLabel } from '@zanake/str';
 import { evaluate } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
-import { Meta, DirMeta, FileMeta, Thumbnail } from './mdx-meta.interfaces';
+import { Meta, DirMeta, FileMeta, Thumbnail } from './meta.interfaces';
 
-export const getFilePaths = (directory: string) => {
+/**
+ * 
+ * @param {string} directory - A path relative to your NodeJS process.cwd()
+ * @returns {Array}
+ */
+export const getMdxFilePaths = (directory: string) => {
     // Get the directory to search through for MDX files
     const dir = path.join(process.cwd(), ...directory.split(path.sep));
 
@@ -18,9 +23,15 @@ export const getFilePaths = (directory: string) => {
     return Array.isArray(files) && files.length && files.every((item) => item.endsWith('.mdx')) ? files : [];
 };
 
-export const getFileMetaData = async (slug: string) => {
+/**
+ * 
+ * @param slug - A path relative or absolute to your NodeJS process.cwd()
+ * 
+ * @returns {FileMeta}
+ */
+export const getMdxMetaExport = async (file: string) => {
     try {
-        const source = await fs.readFile(path.join(process.cwd(), slug));
+        const source = await fs.readFile(path.resolve(process.cwd(), file));
 
         const { meta } = await evaluate(source, {
             ...runtime,
@@ -32,7 +43,8 @@ export const getFileMetaData = async (slug: string) => {
 
         return meta;
     } catch (error) {
-        return { published: false };
+        // console.log(error)
+        return {};
     }
 };
 
@@ -47,7 +59,7 @@ const crawler = async (directory: string, baseURL: string) => {
 
     const nesting = { result };
 
-    const collection = getFilePaths(directory);
+    const collection = getMdxFilePaths(directory);
 
     for (let index = 0; index < collection.length; index++) {
         const absolutePath = collection[index];
@@ -81,7 +93,7 @@ const crawler = async (directory: string, baseURL: string) => {
                     }),
                     ...(isFile && {
                         meta: Object.entries(
-                            (await getFileMetaData(
+                            (await getMdxMetaExport(
                                 `/pages/${directory}/${arr(relativePathComponents).join('/')}`
                             )) as Meta
                         ).reduce((obj, pair) => {
