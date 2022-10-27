@@ -54,7 +54,7 @@ export const getMdxMetaExport = async (file: string) => {
  * @param {string} directory - a path that contains the MDX files to parse
  * @return {Array}
  */
-const crawler = async (directory: string, baseURL: string) => {
+export default async (directory: string, baseURL: string) => {
     const result = Array<DirMeta | FileMeta>;
 
     const nesting = { result };
@@ -144,5 +144,3 @@ const crawler = async (directory: string, baseURL: string) => {
 
     return result;
 };
-
-export default crawler;
