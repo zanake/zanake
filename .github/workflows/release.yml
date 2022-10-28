@@ -1,28 +1,51 @@
 name: NPM & GitHub Packages
 
 on:
-  release:
-    types: [created]
+    release:
+        types: [created]
 
 jobs:
-  npm-registry-release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org/
-          scope: '@zanake'
-      - run: npm clean-install
-      - run: npm run build
-      - run: |
-          for pkg in $(find ./dist/packages/* -maxdepth 0 -type d);
-            do (
-              echo "Publishing : $pkg";
-              cd "$pkg";
-              npm publish --access public;
-            );
-          done
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_REGISTRY_TOKEN}}
+    publish-on-npm-registry:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 16
+                  registry-url: https://registry.npmjs.org/
+                  scope: '@zanake'
+            - run: npm clean-install
+            - run: npm run build
+            - run: |
+                  for pkg in $(find ./dist/packages/* -maxdepth 0 -type d);
+                    do (
+                      echo "Publishing : $pkg";
+                      cd "$pkg";
+                      npm publish --access public;
+                    );
+                  done
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_REGISTRY_TOKEN}}
+
+    publish-on-github-packages:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 16
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@zanake'
+            - run: npm clean-install
+            - run: npm run build
+            - run: |
+                  for pkg in $(find ./dist/packages/* -maxdepth 0 -type d);
+                    do (
+                      echo "Publishing : $pkg";
+                      cd "$pkg";
+                      node -p 'const a = require(`./package.json`); const b = {...a, publishConfig: {registry: `https://npm.pkg.github.com/`}}; require(`fs`).writeFileSync(`./package.json`, JSON.stringify(b));';
+                      npm publish --access public;
+                    );
+                  done
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.PACKAGES_GITHUB_TOKEN}}
