@@ -1,11 +1,39 @@
-# mdx
+# @zanake/mdx
 
-This library was generated with [Nx](https://nx.dev).
+### A utility to collect and parse the `meta object export` from [`.mdx`](https://mdxjs.com/) files in a given directory for [React](https://reactjs.org/) projects.
 
-## Building
+## Meta object export
 
-Run `nx build mdx` to build the library.
+This is what the parser will be expecting, to validate against `Typescript types / interfaces`. In the future we can support custom fields, that fit individual cases.
 
-## Running unit tests
+```javascript
+export const meta = {
+    title: '',
+    published: true,
+    date: 'YYYY-MM-dd',
+    author: '',
+    thumbnail: {
+        src: '',
+        source: {
+            name: 'Free / paid image service',
+            url: 'https://....',
+        },
+        artist: {
+            name: 'John Doe',
+            profile: 'https://....',
+        },
+    },
+    labels: ['lorem', 'ipsum', 'dolor', 'sit', 'amet', ...],
+    excerpt:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vehicula tristique nisl, vitae auctor mauris auctor in. Quisque a tincidunt nisl, eget auctor massa. Nullam lacus dui, mollis egestas mi eu, varius vehicula sapien',
+};
+```
 
-Run `nx test mdx` to execute the unit tests via [Jest](https://jestjs.io).
+## Development
+
+This library was generated with [Nx](https://nx.dev), as part of a monorepo. Here are some commands to target this specific project in the repository.
+
+| Action          | Command            |
+| --------------- | ------------------ |
+| Run unit tests  | **`nx test mdx`**  |
+| Compile & build | **`nx build mdx`** |
