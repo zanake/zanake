@@ -1,7 +1,9 @@
-import { web } from './web';
+import clipboard from './clipboard';
+import snapshots from './snapshots';
+import downloads from './downloads';
 
-describe('web', () => {
-    it('should work', () => {
-        expect(web()).toEqual('web');
-    });
+describe('web package', () => {
+    // describe('clipboard module', () => {});
+    // describe('snapshots module', () => {});
+    // describe('downloads module', () => {});
 });

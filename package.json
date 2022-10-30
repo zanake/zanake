@@ -10,6 +10,7 @@
     "dependencies": {
         "@mdx-js/mdx": "^2.1.5",
         "glob": "^8.0.3",
+        "html2canvas": "^1.4.1",
         "tslib": "^2.3.0"
     },
     "devDependencies": {
