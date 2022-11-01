@@ -1,16 +1,13 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "strict": true,
-        "module": "ES6",
-        "allowJs": true,
-        "esModuleInterop": true,
-        "noImplicitReturns": true,
-        "moduleResolution": "node",
-        "noImplicitOverride": true,
-        "noFallthroughCasesInSwitch": true,
+        "module": "commonjs",
         "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitOverride": true,
         "noPropertyAccessFromIndexSignature": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true
     },
     "files": [],
     "include": [],
