@@ -1,4 +1,4 @@
-import { numeral } from "../lib/typings";
+import { numeral } from "./typings";
 
 export const _even = (x: number) => x % 2 === 0;
 

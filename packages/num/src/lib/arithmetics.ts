@@ -1,5 +1,5 @@
 import { _even, _half } from "./validations";
-import { sum, root, numeral, product, quotient, rounding, difference } from "../lib/typings";
+import { sum, root, numeral, product, quotient, rounding, difference } from "./typings";
 
 /**
  * Get the GCD (Greatest Common Divisor) or HCF (Highest Common Factor) of two numbers

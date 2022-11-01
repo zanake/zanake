@@ -1,6 +1,6 @@
 import path from 'path';
 import { sync } from 'glob';
-import arr from '@zanake/arr';
+import {arr} from '@zanake/arr';
 import { promises as fs } from 'fs';
 import { toLabel } from '@zanake/str';
 import { evaluate } from '@mdx-js/mdx';

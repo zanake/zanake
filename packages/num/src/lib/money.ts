@@ -1,5 +1,5 @@
 import { numeral } from './typings';
-import { addition, division, subtraction, multiplication, roundOff } from '../utils/arithmetics';
+import { addition, division, subtraction, multiplication, roundOff } from './arithmetics';
 
 export class Money {
     #amount: number;

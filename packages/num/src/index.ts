@@ -1,1 +1,1 @@
-export * from './lib/num';
+export * from './lib/money';
