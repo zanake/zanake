@@ -63,13 +63,13 @@ export const toTitle = (value: string, locale = false, exclude: Array<string> = 
     const ignore = [...TILE_CASE_EXCEPTIONS, ...exclude];
 
     return value.split(/\s/g)
-            .reduce((acc, val) => {
-                return acc
-                + "\u00A0"
-                + ignore.includes(val) 
-                    ? toLower(val, locale)
-                    : `${toUpper(val.charAt(0), locale)}${toLower(val.slice(1), locale)}`;
-            }, '');
+        .reduce((acc, val) => {
+            const token = ignore.includes(val)
+                ? toLower(val, locale)
+                : `${toUpper(val.charAt(0), locale)}${toLower(val.slice(1), locale)}`;
+
+            return acc + "\u00A0" + token;
+        }, '');
 }
 
 export default str;
