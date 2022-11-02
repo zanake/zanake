@@ -3,8 +3,6 @@ import { sync } from 'glob';
 import {arr} from '@zanake/arr';
 import { promises as fs } from 'fs';
 import { toLabel } from '@zanake/str';
-import { evaluate } from '@mdx-js/mdx';
-import * as runtime from 'react/jsx-runtime';
 import { Meta, DirMeta, FileMeta, Thumbnail } from './meta.interfaces';
 
 /**
@@ -31,6 +29,9 @@ export const getMdxFilePaths = (directory: string) => {
  */
 export const getMdxMetaExport = async (file: string) => {
     try {
+        const runtime = await import('react/jsx-runtime');
+        const evaluate = (await import('@mdx-js/mdx')).evaluate;
+
         const source = await fs.readFile(path.resolve(process.cwd(), file));
 
         const { meta } = await evaluate(source, {
@@ -54,7 +55,7 @@ export const getMdxMetaExport = async (file: string) => {
  * @param {string} directory - a path that contains the MDX files to parse
  * @return {Array}
  */
-export default async (directory: string, baseURL: string) => {
+export const getMdxMetaData = async (directory: string, baseURL: string) => {
     const result = Array<DirMeta | FileMeta>;
 
     const nesting = { result };
