@@ -32,19 +32,18 @@ export const getMdxMetaExport = async (file: string) => {
         const runtime = await import('react/jsx-runtime');
         const evaluate = (await import('@mdx-js/mdx')).evaluate;
 
-        const source = await fs.readFile(path.resolve(process.cwd(), file));
+        const source = await fs.readFile(path.join(process.cwd(), file));
 
         const { meta } = await evaluate(source, {
-            ...runtime,
-            useDynamicImport: true,
             Fragment: undefined,
             jsx: undefined,
             jsxs: undefined,
+            ...runtime,
+            useDynamicImport: true,
         });
 
         return meta;
     } catch (error) {
-        // console.log(error)
         return {};
     }
 };
