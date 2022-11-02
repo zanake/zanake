@@ -18,8 +18,8 @@ export const toLabel = (value: string) : string => {
         .toLowerCase()
         .trim()
         .replace(/--+/g, '-') // replaces multiple hyphens by one hyphen
+        .replace(/([^\w]+|\s+)/g, '-') // replace space and other characters by hyphen except for alpha-numeric characters
         .replace(/(^-+|-+$)/g, '') // remove extra hyphens from beginning or end of the string
-        .replace(/([^\w]+|\s+)/g, '-'); // replace space and other characters by hyphen except for alpha-numeric characters
 }
 
 export const toLower = (value : string, locale = false) : string => {
