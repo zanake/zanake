@@ -1,5 +1,5 @@
 {
     "name": "@zanake/mdx",
     "version": "0.0.12-beta",
-    "type": "module"
+    "type": "commonjs"
 }
