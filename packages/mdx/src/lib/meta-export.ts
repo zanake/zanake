@@ -1,6 +1,5 @@
 import path from 'path';
 import { promises as fs } from 'fs';
-import { evaluate } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 
 /**
@@ -12,6 +11,8 @@ import * as runtime from 'react/jsx-runtime';
  */
 export default async (file: string) => {
     try {
+        const evaluate = (await import('@mdx-js/mdx')).evaluate;
+
         const filepath = path.resolve(process.cwd(), file);
         const source = await fs.readFile(filepath);
 
