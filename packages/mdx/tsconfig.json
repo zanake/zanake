@@ -10,6 +10,8 @@
         "noFallthroughCasesInSwitch": true,
         "esModuleInterop": true,
         "importHelpers": false,
+        "jsx": "react-jsx",
+        "allowJs": true
     },
     "files": [],
     "include": [],
