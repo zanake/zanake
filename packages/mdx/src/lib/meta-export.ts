@@ -10,6 +10,7 @@ import * as runtime from 'react/jsx-runtime';
  * @returns {Promise}
  */
 export default async (file: string) => {
+    // eslint-disable-next-line no-useless-catch
     try {
         const evaluate = (await import('@mdx-js/mdx')).evaluate;
 
@@ -25,6 +26,6 @@ export default async (file: string) => {
 
         return meta;
     } catch (error) {
-        return {};
+        throw(error);
     }
 };
