@@ -1,3 +1,5 @@
+import { inspect } from "@zanake/fmt";
+
 const TILE_CASE_EXCEPTIONS = [
     // articles
     'a', 'an', 'the',
@@ -7,12 +9,18 @@ const TILE_CASE_EXCEPTIONS = [
     'at' , 'by' , 'down' , 'for' , 'from' , 'in' , 'into' , 'like' , 'near' , "of" , "off" , "on" , "onto" , "over" , 'past' , 'to' , 'upon' , 'with'
 ];
 
-const str = (value: any): string => {
-    return typeof value === "string" ? value : "";
-}
+export const toLabel = (str?: string | Array<string>) : string | never => {
+    if (str === undefined) return '';
 
-export const toLabel = (value: string) : string => {
-    return (value).toString()
+    const _arr = Array.isArray(str);
+    const date = str instanceof Date;
+    const _str = typeof str === 'string';
+
+    if (!_str && !_arr && !date) throw new TypeError(`Expected a date, string, array of strings, given ${inspect(str)}`);
+
+    const value = date ? str.toISOString() : str.toString();
+
+    return (value)
         .normalize( 'NFD' )
         .replace( /[\u0300-\u036f]/g, '' ) // remove accents
         .toLowerCase()
@@ -71,5 +79,3 @@ export const toTitle = (value: string, locale = false, exclude: Array<string> = 
             return acc + "\u00A0" + token;
         }, '');
 }
-
-export default str;
