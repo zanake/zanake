@@ -1,4 +1,9 @@
-export default (value: string | number) :string => {
+import { numeric } from "../typings";
+
+/**
+ * Formats a given numerical value to a human-readable (friendly) format
+ */
+export default (value: numeric) :string => {
     try {
         return (value || '').toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
     } catch (error) {

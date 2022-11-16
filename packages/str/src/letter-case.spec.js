@@ -1,10 +1,7 @@
 import { toLabel } from './index';
 
-// observation
 describe('toLabel', () => {
-    // question
     describe('Does it return an empty string?', () => {
-        // hypothesis & prediction
         const predictions = [
             { label: 'when given an none-empty string of whitespaces', input: '    ' },
             { label: 'when given an none-empty string of hyphens', input: '--' },
@@ -14,7 +11,6 @@ describe('toLabel', () => {
         ];
 
         predictions.forEach(({ label, input }) => {
-            // tests
             test(label, () => {
                 expect(toLabel(input)).toMatch('');
             });

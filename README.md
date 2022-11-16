@@ -84,6 +84,24 @@ Run `nx build my-app` to build the project. The build artifacts will be stored i
 
 ## Unit tests
 
+> **`Red`** . **`Green`** . **`Refactor`** is the `Test Driven Design` philosophy to be used. If the science is true, you'll write better code faster and know it better.
+
+```javascript
+// 1. Observation
+describe('the subject (most likely a function name)', () => {
+    // 2. Question
+    describe('the action you wish to observe', () => {
+        // input & desired outputs (in case you'll iterate)
+
+        // 3. Hypothesis & prediction
+        test('description', () => {
+        // 4. Tests
+            expect(fx(<input>)).<assertion>(<output>);
+        });
+    });
+});
+```
+
 Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
 
 Run `nx affected:test` to execute the unit tests affected by a change.

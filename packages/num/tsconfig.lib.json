@@ -9,7 +9,8 @@
         "composite": true
     },
     "include": [
-        "**/*.ts"
+        "**/*.ts",
+        "**/*.js"
     ],
     "exclude": [
         "jest.config.ts",

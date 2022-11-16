@@ -9,5 +9,9 @@ export type quotient = number;
 export type logarithm = number;
 export type difference = number;
 
-export type numeral = number | string;
+export type figures = number;
+export type wording = string;
+export type numeric = number | string;
+
+
 export type rounding = 'UP' | 'DOWN' | 'HALF_UP' | 'HALF_DOWN' | 'HALF_EVEN' | 'HALF_ODD' | 'HALF_TOWARDS_ZERO' | 'HALF_AWAY_FROM_ZERO';
