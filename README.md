@@ -33,7 +33,7 @@ Below are their core plugins:
     -   `npm install --save-dev @nrwl/angular`
 -   [Nest](https://nestjs.com)
     -   `npm install --save-dev @nrwl/nest`
--   [Next]https://nextjs.org/)
+-   [Next](https://nextjs.org/)
     -   `npm install --save-dev @nrwl/next`
 -   [Express](https://expressjs.com)
     -   `npm install --save-dev @nrwl/express`
