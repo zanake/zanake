@@ -4,8 +4,8 @@
     "version": "0.0.0",
     "scripts": {
         "graph": "nx graph",
-        "test": "nx run-many --target=test --projects=arr,fmt,num,str --parallel=4",
-        "build": "nx run-many --target=build --projects=arr,fmt,num,str --parallel=4"
+        "test": "nx run-many --target=test --projects=arr,fmt,fns,num,str,  --parallel=2",
+        "build": "nx run-many --target=build --projects=arr,fmt,fns,num,str --parallel=2"
     },
     "private": true,
     "dependencies": {
