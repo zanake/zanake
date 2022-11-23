@@ -9,7 +9,8 @@
         "composite": true
     },
     "include": [
-        "**/*.ts"
+        "**/*.ts",
+        "src/arr.spec.js"
     ],
     "exclude": [
         "jest.config.ts",

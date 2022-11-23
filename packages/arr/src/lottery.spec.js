@@ -1,0 +1,1 @@
+import lottery from "./lib/lottery";
