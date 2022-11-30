@@ -1,41 +1,29 @@
-const lotteryTs = require('./lib/lottery')
-const lottery = lotteryTs["default"]
+import { lottery } from './index';
 
-describe('Testing imports', () => {
-	it("should be a function", ()=>{
-		expect(typeof lottery).toBe('function')
-	})
-})
+describe('lottery / arr.lottery function', () => {
+    describe('Is it exposed as a function', () => {
+        test("should be a function", () => {
+            expect(typeof lottery).toBe('function')
+        })
+    });
 
-/**
- * value returned is contained in initial array
- * value is not undefined if array is valid
- * should return the input->undefined if input is invalid **
- * should return undefined if input is an empty array
- */
+    describe(`Does it give a random array item?`, () => {
+        test('when given an empty array', () => {
+            expect(lottery([])).toBeUndefined();
+        });
 
-describe('Testing the return value', () => {
-	it("should return a value contained in the input array", ()=>{
-		expect([1,2,3,4,5]).toContain(lottery([1,2,3,4,5]))
-	})
-	it("should return a value contained in the input array", ()=>{
-		expect(['1','2','3','4','5']).toContain(lottery(['1','2','3','4','5']))
-	})
-	it("should return a value that is defined if input is valid", ()=>{
-		expect(lottery(['1','2','3','4','5'])).not.toBeUndefined
-	})
-	it("should return undefined if input is invalid", ()=>{
-		expect(lottery(1)).toBeUndefined
-	})
-	it('should throw error if no arguments are provided', ()=>{
-		try {
-			expect(lottery()).toBeUndefined
-		} catch (error) {
-			expect(error.message).toBe("Cannot read properties of undefined (reading 'length')")
-		}
-		
-	})
-	it("should return undefined if input array is empty", ()=>{
-		expect(lottery([])).toBeUndefined
-	})
-})
+        test('when given an array with a single item', () => {
+            expect(lottery([1000])).toBe(1000);
+        });
+
+        /**
+         *  TODO: Research on how to check for randomness?
+         * 
+         * Does the size of the array matter?
+         */
+        test('when given an non-empty array', () => {
+            expect(lottery(['x', 'y', 'z'])).not.toBeUndefined();
+            expect(lottery(['x', 'y', 'z'])).toContainEqual(['x', 'y', 'z']);
+        });
+    });
+});
