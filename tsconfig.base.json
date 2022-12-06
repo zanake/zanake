@@ -19,6 +19,7 @@
             "@zanake/fmt": ["packages/fmt/src/index.ts"],
             "@zanake/fns": ["packages/fns/src/index.ts"],
             "@zanake/num": ["packages/num/src/index.ts"],
+            "@zanake/rat": ["packages/rat/src/index.ts"],
             "@zanake/str": ["packages/str/src/index.ts"],
             "@zanake/web": ["packages/web/src/index.ts"]
         }

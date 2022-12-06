@@ -61,10 +61,11 @@ There are also many [community plugins](https://nx.dev/community) you could add.
 
 ## Generate a package to publish in [NPM](https://www.npmjs.com/) or [GitHub](https://docs.github.com/en/packages)
 
-| Plugin       | Command                                                                  | Description        |
-| :----------- | :----------------------------------------------------------------------- | :----------------- |
-| `@nrwl/js`   | `nx generate @nrwl/js:lib <pkg> --publishable --importPath=@org/<pkg>`   | JavaScript Package |
-| `@nrwl/node` | `nx generate @nrwl/node:lib <pkg> --publishable --importPath=@org/<pkg>` | NodeJS Package     |
+| Plugin        | Command                                                            | Description        |
+| :------------ | :----------------------------------------------------------------- | :----------------- |
+| `@nrwl/js`    | `nx g @nrwl/js:lib <pkg> --publishable --importPath=@org/<pkg>`    | JavaScript Package |
+| `@nrwl/node`  | `nx g @nrwl/node:lib <pkg> --publishable --importPath=@org/<pkg>`  | NodeJS Package     |
+| `@nrwl/react` | `nx g @nrwl/react:lib <pkg> --publishable --importPath=@org/<pkg>` | React Package      |
 
 > Add the `--buildable` flag to enable the build process for minification & other optimizations
 
