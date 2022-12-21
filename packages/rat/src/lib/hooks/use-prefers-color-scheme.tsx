@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 /**
- * Checks if the host machine has the light theme toggled
+ * Checks if the host machine has the light theme activated
  * 
  * @returns {boolean}
  */
@@ -13,7 +13,7 @@ const usePrefersColorScheme = () : boolean => {
     const mediaQueryListener = ((event: MediaQueryListEvent) => setLightThemed(event.matches));
 
     useEffect(() => {
-        if (window !== undefined) {
+        if (typeof window !== undefined) {
             const lightThemeMediaQuery = window.matchMedia("(prefers-color-scheme: light)");
             lightThemeMediaQuery.addEventListener("change", mediaQueryListener);
 

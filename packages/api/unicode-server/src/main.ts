@@ -12,20 +12,6 @@ const app = new Koa();
 const filename = path.join(__dirname, './assets/emoji.json');
 
 /**
- * Handle 404 error
- */
-app.use(async (ctx, next) => {
-    if (ctx.status === '404') {
-       ctx.status = 404;
-       ctx.body = JSON.stringify([]);
-
-       ctx.set('Content-Type', 'application/json');
-    }
-
-    next();
-});
-
-/**
  * Emoji resources
  */
 const EMOJI_ENDPOINTS = new Router();
@@ -64,4 +50,4 @@ app
   .use(EMOJI_ENDPOINTS.routes())
   .use(EMOJI_ENDPOINTS.allowedMethods());
 
-app.listen(PORT);
+app.listen(PORT, () => console.log(`🚀 we have take off for the unicode server`));
