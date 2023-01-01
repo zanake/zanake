@@ -1,46 +1,36 @@
 import { useState, useEffect } from "react";
 
+export type theming = "dark" | "light";
+
 /**
- * Checks if the host machine has the light theme activated
+ * Returns the host machine (i.e iPhone, Andriod, windows) preferred color scheme
  * 
- * @param {'dark'|'light'} fallback - default theme in case system default is not detected
+ * @param {theming} fallback - default color scheme in case system default is not detected, if none is given it defaults to "light"
  * 
- * @returns {boolean}
+ * @returns {theming}
  */
-const usePrefersColorScheme = (fallback: 'dark'|'light') : boolean => {
-    const currentColorScheme = () => {
-        let lightThemed = fallback === 'light';
+const usePrefersColorScheme = (fallback: theming) : theming => {
+    const [state, setState] = useState(fallback || "light");
 
-        try {
-            if (typeof window !== "undefined") lightThemed = window.matchMedia("(prefers-color-scheme: light)").matches;
-        } catch (error) {
-            console.debug(error);
-        }
-
-        return lightThemed;
-    }
-
-    const [lightThemed, setLightThemed] = useState(currentColorScheme());
-
-    const mediaQueryListener = ((event: MediaQueryListEvent) => setLightThemed(event.matches));
+    const listener = ((event: MediaQueryListEvent) => setState(event.matches ? "light" : "dark"));
 
     useEffect(() => {
         try {
             if (typeof window !== "undefined") {
-                const lightThemeMediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-                lightThemeMediaQuery.addEventListener("change", mediaQueryListener);
+                const query = window.matchMedia("(prefers-color-scheme: light)");
+                query.addEventListener("change", listener);
 
-                return () => lightThemeMediaQuery.removeEventListener("change", mediaQueryListener);
+                return () => query.removeEventListener("change", listener);
             }
 
             return;
         } catch (error) {
-            console.debug(error);
+            console.error(error);
             return;
         }
     }, []);
 
-    return lightThemed;
+    return state;
 }
 
 export default usePrefersColorScheme;
