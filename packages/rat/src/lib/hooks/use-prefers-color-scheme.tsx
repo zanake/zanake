@@ -22,6 +22,11 @@ const usePrefersColorScheme = (fallback: theming) : theming => {
 
             return () => query.removeEventListener("change", listener);
         }
+
+        return () => {
+            console.debug('window is not defined');
+            console.debug('Nothing to clean up');
+        };
     }, []);
 
     return state;
