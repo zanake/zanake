@@ -6,7 +6,7 @@ interface Snapshot {
     format: 'image/png' | 'image/jpeg';
 }
 
-export default async ({element, format, quality}: Snapshot): Promise<string | undefined> => {
+const snapshot = async ({element, format, quality}: Snapshot): Promise<string | undefined> => {
     try {
         const canvas = await html2canvas(element);
 
@@ -16,3 +16,5 @@ export default async ({element, format, quality}: Snapshot): Promise<string | un
         throw error;
     }
 };
+
+export default snapshot;

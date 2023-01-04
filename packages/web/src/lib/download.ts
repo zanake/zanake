@@ -3,7 +3,7 @@ interface Download {
     base64Data: string;
 }
 
-export default ({ filename, base64Data }: Download): void => {
+const download = ({ filename, base64Data }: Download): void => {
     const extension = base64Data.split(';')[0].split('/')[1];
 
     if (filename !== undefined && filename.trim().length !== 0) {
@@ -27,3 +27,5 @@ export default ({ filename, base64Data }: Download): void => {
     // clean-up element from DOM
     document.body.removeChild(link);
 };
+
+export default download;
