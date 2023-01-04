@@ -1,26 +1,52 @@
-export default (content: string) : Promise<void> => {
-    // navigator clipboard api needs a secure context (https)
-    if (navigator.clipboard && window.isSecureContext) {
-        // navigator clipboard api method'
-        return navigator.clipboard.writeText(content);
-    } else {
-        // text area method
-        const textArea = document.createElement("textarea");
+const clipboard = (content: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        const supported =
+            typeof window.navigator !== 'undefined' &&
+            typeof window.navigator.clipboard !== 'undefined' &&
+            navigator.permissions !== undefined;
 
-        // make the textarea out of viewport
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        textArea.style.top = "-999999px";
-        textArea.value = content;
+        if (supported) {
+            const type = 'text/plain';
+            const blob = new window.Blob([content], { type });
+            const data = [new window.ClipboardItem({ [type]: blob })];
 
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
+            navigator.clipboard.write(data).then(
+                () => {
+                    /* success */
+                    console.debug(`navigator.clipboard updated successfully!`, content);
+                    resolve();
+                },
+                () => {
+                    /* failure */
+                    console.debug(`navigator.clipboard update failed!`, content);
 
-        return new Promise(() :void => {
-            // here the magic happens
-            document.execCommand('copy') ? Promise.resolve() : Promise.reject();
-            textArea.remove();
-        });
-    }
-}
+                    // recover with legacy APIs
+                    const textarea = document.createElement('textarea');
+                    textarea.value = content;
+                    textarea.style.border = 'none';
+                    textarea.style.outline = 'none';
+                    textarea.style.boxShadow = 'none';
+                    textarea.style.position = 'fixed';
+                    textarea.style.background = 'transparent';
+                    document.body.appendChild(textarea);
+
+                    textarea.focus();
+                    textarea.select();
+                    textarea.setSelectionRange(0, 99999);
+
+                    try {
+                        document.execCommand('copy');
+                        resolve();
+                    } catch (error) {
+                        console.debug(`Legacy 'copy' API failed`, error);
+                        reject(new Error('None of clipboard updating methods are supported by this browser!'));
+                    } finally {
+                        document.body.removeChild(textarea);
+                    }
+                }
+            );
+        }
+    });
+};
+
+export default clipboard;
