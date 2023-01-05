@@ -1,5 +1,5 @@
 {
     "name": "@zanake/web",
     "version": "v0.0.28-beta",
-    "type": "commonjs"
+    "type": "module"
 }
