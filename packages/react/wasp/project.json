@@ -1,0 +1,54 @@
+{
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "name": "wasp",
+    "sourceRoot": "packages/react/wasp/src",
+    "projectType": "library",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@nrwl/web:rollup",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/packages/react/wasp",
+                "tsConfig": "packages/react/wasp/tsconfig.lib.json",
+                "project": "packages/react/wasp/package.json",
+                "entryFile": "packages/react/wasp/src/index.ts",
+                "external": [
+                    "react/jsx-runtime"
+                ],
+                "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                "compiler": "babel",
+                "assets": [
+                    {
+                        "glob": "packages/react/wasp/README.md",
+                        "input": ".",
+                        "output": "."
+                    }
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "packages/react/wasp/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "packages/react/wasp/jest.config.ts",
+                "passWithNoTests": true
+            }
+        }
+    }
+}
