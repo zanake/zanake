@@ -21,6 +21,7 @@
             "@zanake/num": ["packages/num/src/index.ts"],
             "@zanake/rat": ["packages/rat/src/index.ts"],
             "@zanake/str": ["packages/str/src/index.ts"],
+            "@zanake/wasp": ["packages/wasp/src/index.ts"],
             "@zanake/web": ["packages/web/src/index.ts"]
         }
     },
