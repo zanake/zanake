@@ -6,8 +6,8 @@
         "graph": "nx graph",
         "build:unicode-server": "nx run api-unicode-server:build",
         "start:unicode-server": "node dist/packages/api/unicode-server/main.js",
-        "test": "nx run-many --target=test --projects=arr,fmt,fns,num,rat,str,web,wasp  --parallel=2",
-        "build": "nx run-many --target=build --projects=arr,fmt,fns,num,rat,str,web,wasp --parallel=2"
+        "test": "nx run-many --target=test --projects=arr,fmt,fns,num,rat,str,web,wasp,scale --parallel=2",
+        "build": "nx run-many --target=build --projects=arr,fmt,fns,num,rat,str,web,wasp,scale --parallel=2"
     },
     "private": true,
     "dependencies": {

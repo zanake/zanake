@@ -1,7 +1,7 @@
 {
-    "name": "scales",
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "packages/react/scales/src",
+    "name": "scale",
+    "sourceRoot": "packages/react/scale/src",
     "projectType": "library",
     "tags": [],
     "targets": {
@@ -11,10 +11,10 @@
                 "{options.outputPath}"
             ],
             "options": {
-                "outputPath": "dist/packages/react/scales",
-                "tsConfig": "packages/react/scales/tsconfig.lib.json",
-                "project": "packages/react/scales/package.json",
-                "entryFile": "packages/react/scales/src/index.ts",
+                "outputPath": "dist/packages/scale",
+                "tsConfig": "packages/react/scale/tsconfig.lib.json",
+                "project": "packages/react/scale/package.json",
+                "entryFile": "packages/react/scale/src/index.ts",
                 "external": [
                     "react/jsx-runtime"
                 ],
@@ -22,7 +22,7 @@
                 "compiler": "babel",
                 "assets": [
                     {
-                        "glob": "packages/react/scales/README.md",
+                        "glob": "packages/react/scale/README.md",
                         "input": ".",
                         "output": "."
                     }
@@ -36,7 +36,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "packages/react/scales/**/*.{ts,tsx,js,jsx}"
+                    "packages/react/scale/**/*.{ts,tsx,js,jsx}"
                 ]
             }
         },
@@ -46,7 +46,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "packages/react/scales/jest.config.ts",
+                "jestConfig": "packages/react/scale/jest.config.ts",
                 "passWithNoTests": true
             }
         }

@@ -11,7 +11,7 @@
                 "{options.outputPath}"
             ],
             "options": {
-                "outputPath": "dist/packages/react/wasp",
+                "outputPath": "dist/packages/wasp",
                 "tsConfig": "packages/react/wasp/tsconfig.lib.json",
                 "project": "packages/react/wasp/package.json",
                 "entryFile": "packages/react/wasp/src/index.ts",
