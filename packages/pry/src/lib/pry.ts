@@ -1,6 +1,16 @@
-type Level = "log"|"info"|"error"|"debug";
+type Level = "log"|"info"|"warn"|"error"|"debug";
 
-const logger = async ({level, entry, message, directory = null}: {level: Level, entry: string, message: string, directory: string | null}) : Promise<void> => {
+export interface Pry {level: Level,title: string,message: string, directory: string | null}
+
+/**
+ * A logging utility for both the NodeJS & browser JavaScript environments
+ * 
+ * @param {Level} config.level - Importance of the information being logged
+ * @param {string} config.title - Headline or caption for the log entry
+ * @param {string} config.message - Detailed content for the log entry
+ * @param {string|null} config.directory - Absolute path where your log files be created
+ */
+const logger = async ({level = 'log', title, message, directory = null}: Partial<Pry>) : Promise<void> => {
     const writer = typeof console[level] === "function"
         ? console[level]
         : console.log;
@@ -15,32 +25,35 @@ const logger = async ({level, entry, message, directory = null}: {level: Level, 
         case "info":
             emoji = "✅";
             break;
+        case "warn":
+            emoji = "❗";
+            break;
         case "error":
             emoji = "❌";
             break;
         case "debug":
-            emoji = "🦋";
+            emoji = "🐞";
             break;
         default:
-            emoji = "📌";
+            emoji = "🚩";
             break;
     }
 
-    writer(`${emoji} [${date}] ${entry}`, `\n${JSON.stringify(message, null, "....")}\n`);
+    writer(`${emoji} [${date}] ${title}`, `\n${JSON.stringify(message, null, "....")}\n`);
 
-    if (window === undefined && directory !== null) {
+    if (directory !== null) {
         try {
             const path = await import("path");
             const fs = await import("fs/promises");
 
-            const handle = await fs.open(path.resolve(directory, `${level}.log`));
+            const handle = await fs.open(path.resolve(process.cwd(), directory, `${level}.log`), 'a+');
 
             const stream = handle.createWriteStream();
-            stream.write(`${emoji} [${date}] ${entry}\n`);
+
+            stream.write(`${emoji} [${date}] ${title}\n`);
             stream.end(`${JSON.stringify(message, null, "....")}\n\n`);
         } catch (error) {
             console.error(error);
-            writer(`${emoji} [${date}] ${entry}`, `\n${JSON.stringify(message, null, "....")}\n`);
         }
     }
 };
