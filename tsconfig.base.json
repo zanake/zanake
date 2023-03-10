@@ -21,6 +21,7 @@
             "@zanake/num": ["packages/num/src/index.ts"],
             "@zanake/pry": ["packages/pry/src/index.ts"],
             "@zanake/rat": ["packages/rat/src/index.ts"],
+            "@zanake/ric": ["packages/ric/src/index.ts"],
             "@zanake/scale": ["packages/react/scale/src/index.ts"],
             "@zanake/str": ["packages/str/src/index.ts"],
             "@zanake/wasp": ["packages/react/wasp/src/index.ts"],

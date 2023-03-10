@@ -16,6 +16,7 @@
         "@mdx-js/mdx": "^2.1.5",
         "@types/feather-icons": "^4.29.0",
         "antd": "^5.1.5",
+        "bootstrap-icons": "^1.10.3",
         "core-js": "^3.6.5",
         "feather-icons": "^4.29.0",
         "glob": "^8.0.3",
