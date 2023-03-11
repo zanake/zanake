@@ -6,7 +6,7 @@ export interface IBootstrapIconProps extends SVGProps<SVGSVGElement> {
     name: BootstrapIconNames;
 }
 
-const Bootstrap = ({ fill, name, width, style, height, className, ...props }: IBootstrapIconProps) => {
+export const Bootstrap = ({ fill, name, width, style, height, className, ...props }: IBootstrapIconProps) => {
     const icon = `<use xlink:href="${sprite}#${name}" />`;
 
     return (
@@ -21,5 +21,3 @@ const Bootstrap = ({ fill, name, width, style, height, className, ...props }: IB
         />
     );
 };
-
-export default Bootstrap;

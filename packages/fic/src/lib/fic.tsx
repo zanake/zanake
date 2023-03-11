@@ -6,7 +6,7 @@ export interface IFeatherIconProps extends SVGProps<SVGSVGElement> {
     name: FeatherIconNames;
 }
 
-const Feather = ({ name, ...props }: IFeatherIconProps) => {
+export const Feather = ({ name, ...props }: IFeatherIconProps) => {
     const icon: FeatherIcon = icons[name];
 
     const attrs = Object.entries(icon.attrs).reduce((obj, pair) => {
@@ -18,5 +18,3 @@ const Feather = ({ name, ...props }: IFeatherIconProps) => {
 
     return <svg {...{ ...attrs, ...props }} dangerouslySetInnerHTML={{ __html: icon.contents }} />;
 };
-
-export default Feather;

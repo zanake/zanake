@@ -10,7 +10,7 @@ export interface Pry {level: Level,title: string,message: string, directory: str
  * @param {string} config.message - Detailed content for the log entry
  * @param {string|null} config.directory - Absolute path where your log files be created
  */
-const logger = async ({level = 'log', title, message, directory = null}: Partial<Pry>) : Promise<void> => {
+export const logger = async ({level = 'log', title, message, directory = null}: Partial<Pry>) : Promise<void> => {
     const writer = typeof console[level] === "function"
         ? console[level]
         : console.log;
@@ -23,7 +23,7 @@ const logger = async ({level = 'log', title, message, directory = null}: Partial
             emoji = "📌";
             break;
         case "info":
-            emoji = "✅";
+            emoji = "🛟";
             break;
         case "warn":
             emoji = "❗";
@@ -57,5 +57,3 @@ const logger = async ({level = 'log', title, message, directory = null}: Partial
         }
     }
 };
-
-export default logger;
