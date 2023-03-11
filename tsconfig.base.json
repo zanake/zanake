@@ -10,23 +10,48 @@
         "importHelpers": true,
         "target": "es2015",
         "module": "esnext",
-        "lib": ["es2017", "dom"],
+        "lib": [
+            "es2017",
+            "dom"
+        ],
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@zanake/arr": ["packages/arr/src/index.ts"],
-            "@zanake/fmt": ["packages/fmt/src/index.ts"],
-            "@zanake/fns": ["packages/fns/src/index.ts"],
-            "@zanake/num": ["packages/num/src/index.ts"],
-            "@zanake/pry": ["packages/pry/src/index.ts"],
-            "@zanake/rat": ["packages/rat/src/index.ts"],
-            "@zanake/ric": ["packages/ric/src/index.ts"],
-            "@zanake/scale": ["packages/react/scale/src/index.ts"],
-            "@zanake/str": ["packages/str/src/index.ts"],
-            "@zanake/wasp": ["packages/react/wasp/src/index.ts"],
-            "@zanake/web": ["packages/web/src/index.ts"]
+            "@zanake/arr": [
+                "packages/arr/src/index.ts"
+            ],
+            "@zanake/bee": [
+                "packages/bee/src/index.ts"
+            ],
+            "@zanake/fmt": [
+                "packages/fmt/src/index.ts"
+            ],
+            "@zanake/fns": [
+                "packages/fns/src/index.ts"
+            ],
+            "@zanake/num": [
+                "packages/num/src/index.ts"
+            ],
+            "@zanake/pry": [
+                "packages/pry/src/index.ts"
+            ],
+            "@zanake/ric": [
+                "packages/ric/src/index.ts"
+            ],
+            "@zanake/str": [
+                "packages/str/src/index.ts"
+            ],
+            "@zanake/use": [
+                "packages/use/src/index.ts"
+            ],
+            "@zanake/web": [
+                "packages/web/src/index.ts"
+            ]
         }
     },
-    "exclude": ["node_modules", "tmp"]
+    "exclude": [
+        "node_modules",
+        "tmp"
+    ]
 }
