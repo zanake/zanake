@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
-import { icons, FeatherIcon, FeatherIconNames } from 'feather-icons';
 import { HTMLAttributeNames, HTML_JSX_ATTRIBUTE_MAPPING } from '.';
+import { icons, FeatherIcon, FeatherIconNames } from 'feather-icons';
 
 export interface IFeatherIconProps extends SVGProps<SVGSVGElement> {
     name: FeatherIconNames;
