@@ -1,5 +1,10 @@
 {
+    "license": "MIT",
+    "type": "commonjs",
     "name": "@zanake/arr",
     "version": "v0.0.40-beta",
-    "type": "commonjs"
+    "description": "A JavaScript utility that provides useful functions to handle various tasks / procedures in an array.",
+    "contributors": [
+        "Howard Mnengwa <howard@mnengwa.com> (http://github.com/mnengwa)"
+    ]
 }

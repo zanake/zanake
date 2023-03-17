@@ -4,8 +4,7 @@
     "version": "0.0.0",
     "scripts": {
         "graph": "nx graph",
-        "build:unicode-server": "nx run api-unicode-server:build",
-        "start:unicode-server": "node dist/packages/api/unicode-server/main.js",
+        "build:idx": "nx run api-unicode-server:build",
         "test": "nx run-many --target=test --projects=arr,fmt,fns,num,str,web,pry,bic,fic,bee,use --parallel=3",
         "build": "nx run-many --target=build --projects=arr,fmt,fns,num,str,web,pry,bic,fic,bee,use --parallel=3"
     },
@@ -18,6 +17,7 @@
         "antd": "^5.1.5",
         "bootstrap-icons": "^1.10.3",
         "core-js": "^3.6.5",
+        "fast-html-parser": "^1.0.1",
         "feather-icons": "^4.29.0",
         "glob": "^8.0.3",
         "html2canvas": "^1.4.1",
@@ -26,6 +26,7 @@
         "react-dom": "18.2.0",
         "regenerator-runtime": "0.13.7",
         "styled-jsx": "5.0.7",
+        "tape": "^5.6.3",
         "tslib": "^2.3.0"
     },
     "devDependencies": {
@@ -40,6 +41,7 @@
         "@nrwl/web": "15.2.4",
         "@nrwl/workspace": "14.8.2",
         "@testing-library/react": "13.4.0",
+        "@types/fast-html-parser": "^1.0.2",
         "@types/glob": "^8.0.0",
         "@types/jest": "28.1.1",
         "@types/mdx": "^2.0.3",

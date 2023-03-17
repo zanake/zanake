@@ -21,6 +21,7 @@
             "@zanake/fic": ["packages/fic/src/index.ts"],
             "@zanake/fmt": ["packages/fmt/src/index.ts"],
             "@zanake/fns": ["packages/fns/src/index.ts"],
+            "@zanake/idx": ["packages/idx/src/index.ts"],
             "@zanake/num": ["packages/num/src/index.ts"],
             "@zanake/pry": ["packages/pry/src/index.ts"],
             "@zanake/str": ["packages/str/src/index.ts"],

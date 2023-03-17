@@ -1,0 +1,35 @@
+{
+    "name": "idx",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "packages/idx/src",
+    "projectType": "library",
+    "targets": {
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["packages/idx/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "packages/idx/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "build": {
+            "executor": "@nrwl/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/packages/idx",
+                "tsConfig": "packages/idx/tsconfig.lib.json",
+                "packageJson": "packages/idx/package.json",
+                "main": "packages/idx/src/index.ts",
+                "assets": ["packages/idx/*.md"]
+            }
+        }
+    },
+    "tags": []
+}
