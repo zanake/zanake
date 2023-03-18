@@ -40,8 +40,8 @@ const emojiComponents: IDataEmojiComponents = {};
 const VARIATION_16 = String.fromCodePoint(0xfe0f);
 const SKIN_TONE_VARIATION_DESC = /\sskin\stone(?:,|$)/;
 
-const orderedEmojiData = readFileSync('./emoji-order.txt', 'utf-8');
-const groupedEmojiData = readFileSync('./emoji-group.txt', 'utf-8');
+const orderedEmojiData = readFileSync('./dist/emoji-order.txt', 'utf-8');
+const groupedEmojiData = readFileSync('./dist/emoji-group.txt', 'utf-8');
 
 /**
  * 'flag: St. Kitts & Nevis' -> 'flag_st_kitts_nevis'
@@ -224,7 +224,7 @@ for (const emoji of orderedEmoji) {
 //   },
 //   ...
 // }
-writeFileSync('data-by-emoji.json', JSON.stringify(dataByEmoji, null, 2));
+writeFileSync('dist/data-by-emoji.json', JSON.stringify(dataByEmoji, null, 2));
 
 // {
 //   "Smileys & Emotion": [
@@ -238,18 +238,18 @@ writeFileSync('data-by-emoji.json', JSON.stringify(dataByEmoji, null, 2));
 //   ],
 //   ...
 // }
-writeFileSync('data-by-group.json', JSON.stringify(dataByGroup, null, 2));
+writeFileSync('dist/data-by-group.json', JSON.stringify(dataByGroup, null, 4));
 
 // [
 //   "😀",
 //   "😃",
 //   ...
 // ]
-writeFileSync('data-ordered-emoji.json', JSON.stringify(orderedEmoji, null, 2));
+writeFileSync('dist/data-ordered-emoji.json', JSON.stringify(orderedEmoji, null, 4));
 
 // {
 //   "light_skin_tone": "🏻",
 //   "medium_light_skin_tone": "🏼",
 //   ...
 // }
-writeFileSync('data-emoji-components.json', JSON.stringify(emojiComponents, null, 2));
+writeFileSync('dist/data-emoji-components.json', JSON.stringify(emojiComponents, null, 4));
