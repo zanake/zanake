@@ -1,47 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { readFileSync, writeFileSync } from 'fs';
+import { IDataByEmoji, IDataByGroup, IDataEmojiComponents } from '.';
 
-interface IDataByEmoji {
-    [key: string]: {
-        name: string,
-        slug: string,
-        group: string ,
-        emoji_version: string,
-        unicode_version: string,
-        skin_tone_support: boolean,
-        skin_tone_support_unicode_version?: string
-    }
-}
-
-interface IDataByGroup {
-    name: string
-    slug: string
-    emojis: {
-        name: string,
-        slug: string,
-        emoji: string,
-        emoji_version: string,
-        unicode_version: string,
-        skin_tone_support: boolean,
-        skin_tone_support_unicode_version?: string
-    }[]
-}
-
-interface IDataEmojiComponents {
-    [key: string]: string
-}
 
 // Final data holder
 const orderedEmoji: string[] = [];
-const dataByEmoji : IDataByEmoji= {};
-const dataByGroup : IDataByGroup[] = [];
+const dataByEmoji: IDataByEmoji = {};
+const dataByGroup: IDataByGroup[] = [];
 const emojiComponents: IDataEmojiComponents = {};
 
 const VARIATION_16 = String.fromCodePoint(0xfe0f);
 const SKIN_TONE_VARIATION_DESC = /\sskin\stone(?:,|$)/;
 
-const orderedEmojiData = readFileSync('./dist/emoji-order.txt', 'utf-8');
-const groupedEmojiData = readFileSync('./dist/emoji-group.txt', 'utf-8');
+const orderedEmojiData = readFileSync('./dist/emoji/emoji-order.txt', 'utf-8');
+const groupedEmojiData = readFileSync('./dist/emoji/emoji-group.txt', 'utf-8');
 
 /**
  * 'flag: St. Kitts & Nevis' -> 'flag_st_kitts_nevis'
@@ -52,8 +24,8 @@ const groupedEmojiData = readFileSync('./dist/emoji-group.txt', 'utf-8');
  *
  * returns machine readable emoji short code
  */
-const slugify = (str: string) : string => {
-    const SLUGIFY_REPLACEMENT = {'*': 'asterisk', '#': 'number sign'};
+const slugify = (str: string): string => {
+    const SLUGIFY_REPLACEMENT = { '*': 'asterisk', '#': 'number sign' };
 
     type KEY = keyof typeof SLUGIFY_REPLACEMENT;
     type VAL = typeof SLUGIFY_REPLACEMENT[KEY];
@@ -69,7 +41,7 @@ const slugify = (str: string) : string => {
         .trim()
         .replace(/[\W|_]+/g, '_')
         .toLowerCase();
-}
+};
 
 // The group data tells if the emoji is one of the following:
 //   component
@@ -110,10 +82,11 @@ groupedEmojiData.split('\n').forEach((line) => {
 
             const emojiversion: string | undefined = groups?.['emojiversion'];
 
-            const type : string | undefined | "component" | "unqualified" | "fully-qualified" | "minimally-qualified" = groups?.['type'];
+            const type: string | undefined | 'component' | 'unqualified' | 'fully-qualified' | 'minimally-qualified' =
+                groups?.['type'];
 
             switch (type) {
-                case 'component':
+                case 'fully-qualified':
                     if (emoji === undefined || line.match(SKIN_TONE_VARIATION_DESC)) return;
 
                     // @ts-ignore
@@ -132,11 +105,11 @@ groupedEmojiData.split('\n').forEach((line) => {
                         emoji_version: emojiversion,
                     };
                     break;
-                case 'fully-qualified':
+                case 'component':
                     // @ts-ignore
                     emojiComponents[slugify(desc)] = emoji;
                     break;
-            
+
                 default:
                     break;
             }
@@ -163,7 +136,7 @@ orderedEmojiData.split('\n').forEach((line) => {
     const match = line.match(ORDERED_EMOJI_REGEX);
     if (!match) return;
 
-    const {groups} = match;
+    const { groups } = match;
 
     const name: string | undefined = groups?.['name'];
     const desc: string | undefined = groups?.['desc'];
@@ -180,7 +153,9 @@ orderedEmojiData.split('\n').forEach((line) => {
         dataByEmoji[currentEmoji as keyof typeof dataByEmoji].skin_tone_support_unicode_version = version;
     } else {
         // Workaround for ordered data missing VARIATION_16 (smiling_face)
-        const emojiWithOptionalVariation16 = dataByEmoji[emoji as keyof typeof dataByEmoji] ? emoji : emoji + VARIATION_16;
+        const emojiWithOptionalVariation16 = dataByEmoji[emoji as keyof typeof dataByEmoji]
+            ? emoji
+            : emoji + VARIATION_16;
         const emojiEntry = dataByEmoji[emojiWithOptionalVariation16 as keyof typeof dataByEmoji];
         if (!emojiEntry) {
             if (Object.values(emojiComponents).includes(emoji)) return;
@@ -188,10 +163,10 @@ orderedEmojiData.split('\n').forEach((line) => {
         }
         currentEmoji = emojiWithOptionalVariation16;
         orderedEmoji.push(currentEmoji);
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].name = fullName ?? "";
+        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].name = fullName ?? '';
         dataByEmoji[currentEmoji as keyof typeof dataByEmoji].skin_tone_support = false;
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].slug = slugify(fullName ?? "");
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].unicode_version = version ?? "";
+        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].slug = slugify(fullName ?? '');
+        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].unicode_version = version ?? '';
     }
 });
 
@@ -224,7 +199,7 @@ for (const emoji of orderedEmoji) {
 //   },
 //   ...
 // }
-writeFileSync('dist/data-by-emoji.json', JSON.stringify(dataByEmoji, null, 2));
+writeFileSync('./dist/emoji/data-by-emoji.json', JSON.stringify(dataByEmoji, null, 4));
 
 // {
 //   "Smileys & Emotion": [
@@ -238,18 +213,18 @@ writeFileSync('dist/data-by-emoji.json', JSON.stringify(dataByEmoji, null, 2));
 //   ],
 //   ...
 // }
-writeFileSync('dist/data-by-group.json', JSON.stringify(dataByGroup, null, 4));
+writeFileSync('./dist/emoji/data-by-group.json', JSON.stringify(dataByGroup, null, 4));
 
 // [
 //   "😀",
 //   "😃",
 //   ...
 // ]
-writeFileSync('dist/data-ordered-emoji.json', JSON.stringify(orderedEmoji, null, 4));
+writeFileSync('./dist/emoji/data-ordered-emoji.json', JSON.stringify(orderedEmoji, null, 4));
 
 // {
 //   "light_skin_tone": "🏻",
 //   "medium_light_skin_tone": "🏼",
 //   ...
 // }
-writeFileSync('dist/data-emoji-components.json', JSON.stringify(emojiComponents, null, 4));
+writeFileSync('./dist/emoji/data-emoji-components.json', JSON.stringify(emojiComponents, null, 4));

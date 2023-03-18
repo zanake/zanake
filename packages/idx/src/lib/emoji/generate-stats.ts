@@ -1,7 +1,8 @@
+import { IStats } from '.';
 import { parse } from 'fast-html-parser';
 import { writeFileSync, readFileSync } from 'fs';
 
-const html = readFileSync('./emoji-counts.html', 'utf-8');
+const html = readFileSync('dist/emoji/emoji-counts.html', 'utf-8');
 const parsedRoot = parse(html);
 
 const skinToneMarker = '🏿';
@@ -9,15 +10,6 @@ const allRows = parsedRoot.querySelectorAll('tr');
 
 const theadCells = allRows[0].childNodes;
 const totalCells = allRows[allRows.length - 1].childNodes;
-
-interface IStats {
-    groups: any;
-    total: number;
-    component: number;
-    skin_tone_variations: number;
-    dual_skin_tone_support: number;
-    total_without_skin_tone_variations?: number;
-}
 
 const stats: IStats = {
     groups: {},
@@ -67,4 +59,4 @@ stats.skin_tone_variations = counts.reduce((a, b) => a + b);
 // Calculate total count without variations
 stats.total_without_skin_tone_variations = stats.total - stats.skin_tone_variations - (stats?.component ?? 0);
 
-writeFileSync('./test/stats.json', JSON.stringify(stats, null, 2));
+writeFileSync('./dist/emoji/stats.json', JSON.stringify(stats, null, 4));

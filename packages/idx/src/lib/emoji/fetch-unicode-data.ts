@@ -22,7 +22,7 @@ for (const source of Object.entries(sources)) {
     const filename = source[0];
     const resource = source[1];
 
-    const fileWriteStream = createWriteStream(`dist/${filename}`);
+    const fileWriteStream = createWriteStream(`./dist/emoji/${filename}`);
 
     wget(resource, (response) => response.pipe(fileWriteStream));
 }

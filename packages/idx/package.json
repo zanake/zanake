@@ -9,9 +9,9 @@
     ],
     "description": "Static & usable JSON files fetched from \"official\" indexes, databases or sources",
     "scripts": {
-        "test": "ts-node test/test.js",
-        "download": "ts-node src/lib/emoji/script/download-unicode-data",
-        "build": "ts-node script/build.js && node script/generate-emoji-counts.js"
+        "test": "ts-node index.spec.js",
+        "fetch": "ts-node src/lib/emoji/fetch-unicode-data",
+        "build": "ts-node src/lib/emoji/generate-build && ts-node src/lib/emoji/generate-stats"
     },
     "devDependencies": {
         "@types/fast-html-parser": "^1.0.2"
