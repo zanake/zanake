@@ -2,36 +2,45 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { IDataByEmoji, IDataByGroup, IDataEmojiComponents } from '.';
 
+const VARIATION_16 = String.fromCodePoint(0xfe0f);
+const SKIN_TONE_VARIATION_DESC = /\sskin\stone(?:,|$)/;
+const orderedEmojiData = readFileSync('./dist/emoji/emoji-order.txt', 'utf-8');
+const groupedEmojiData = readFileSync('./dist/emoji/emoji-group.txt', 'utf-8');
 
-// Final data holder
 const orderedEmoji: string[] = [];
 const dataByEmoji: IDataByEmoji = {};
 const dataByGroup: IDataByGroup[] = [];
 const emojiComponents: IDataEmojiComponents = {};
 
-const VARIATION_16 = String.fromCodePoint(0xfe0f);
-const SKIN_TONE_VARIATION_DESC = /\sskin\stone(?:,|$)/;
+type EmojiRegexMatchGroups = {
+    groups?: { [key: string]: string | undefined; type?: string; emoji?: string; desc?: string; emojiversion?: string };
+};
+type EmojiRegexMatchTokens = {
+    type?: string | 'component' | 'unqualified' | 'fully-qualified' | 'minimally-qualified';
+    emoji?: string;
+    desc?: string;
+    emojiversion?: string;
+};
+type OrderedEmojiRegexMatchGroups = {
+    groups?: { [key: string]: string | undefined; emoji?: string; name?: string; desc?: string; version?: string };
+};
+type OrderedEmojiRegexMatchTokens = { emoji?: string; name?: string; desc?: string; version?: string };
 
-const orderedEmojiData = readFileSync('./dist/emoji/emoji-order.txt', 'utf-8');
-const groupedEmojiData = readFileSync('./dist/emoji/emoji-group.txt', 'utf-8');
+// 'flag: St. Kitts & Nevis' -> 'flag_st_kitts_nevis'
+// 'family: woman, woman, boy, boy' -> 'family_woman_woman_boy_boy'
+// 'A button (blood type)' -> 'a_button'
+// 'Cocos (Keeling) Islands' -> 'cocos_islands'
+// 'keycap *' -> 'keycap_asterisk'
+//
+// Returns machine readable emoji short code
+const SLUGIFY_REPLACEMENT = { '*': 'asterisk', '#': 'number sign' };
 
-/**
- * 'flag: St. Kitts & Nevis' -> 'flag_st_kitts_nevis'
- * 'family: woman, woman, boy, boy' -> 'family_woman_woman_boy_boy'
- * 'A button (blood type)' -> 'a_button'
- * 'Cocos (Keeling) Islands' -> 'cocos_islands'
- * 'keycap *' -> 'keycap_asterisk'
- *
- * returns machine readable emoji short code
- */
-const slugify = (str: string): string => {
-    const SLUGIFY_REPLACEMENT = { '*': 'asterisk', '#': 'number sign' };
+type SlugifyReplacementKey = keyof typeof SLUGIFY_REPLACEMENT;
+type SlugifyReplacementVal = typeof SLUGIFY_REPLACEMENT[SlugifyReplacementKey];
 
-    type KEY = keyof typeof SLUGIFY_REPLACEMENT;
-    type VAL = typeof SLUGIFY_REPLACEMENT[KEY];
-
+function slugify(str: string): string {
     for (const key in SLUGIFY_REPLACEMENT) {
-        str = str.replace(key, SLUGIFY_REPLACEMENT[key as KEY] as VAL);
+        str = str.replace(key, SLUGIFY_REPLACEMENT[key as SlugifyReplacementKey] as SlugifyReplacementVal);
     }
 
     return str
@@ -41,13 +50,8 @@ const slugify = (str: string): string => {
         .trim()
         .replace(/[\W|_]+/g, '_')
         .toLowerCase();
-};
+}
 
-// The group data tells if the emoji is one of the following:
-//   component
-//   fully-qualified
-//   minimally-qualified
-//   unqualified
 //
 // We only want fully-qualified emoji in the output data
 
@@ -62,40 +66,27 @@ const GROUP_REGEX = /^#\sgroup:\s(?<name>.+)/;
 //                                              |1------------|      |2-| |3| |4-----------------------------|
 //
 const EMOJI_REGEX = /^[^#]+;\s(?<type>[\w-]+)\s+#\s(?<emoji>\S+)\sE(?<emojiversion>\d+\.\d)\s(?<desc>.+)/;
-
-let currentGroup: undefined | string | null = null;
+let currentGroup: any = null;
 
 groupedEmojiData.split('\n').forEach((line) => {
     const groupMatch = line.match(GROUP_REGEX);
-
-    if (groupMatch) {
-        currentGroup = groupMatch.groups?.['name'];
+    if (groupMatch && groupMatch.groups !== undefined) {
+        currentGroup = groupMatch.groups['name'];
     } else {
         const emojiMatch = line.match(EMOJI_REGEX);
+        if (emojiMatch && emojiMatch.groups !== undefined) {
+            const { groups }: EmojiRegexMatchGroups = emojiMatch;
+            const { type, emoji, desc, emojiversion }: EmojiRegexMatchTokens = groups;
 
-        if (emojiMatch) {
-            const { groups } = emojiMatch;
+            if (type === 'fully-qualified') {
+                if (line.match(SKIN_TONE_VARIATION_DESC)) return;
 
-            const desc: string | undefined = groups?.['desc'];
-
-            const emoji: string | undefined = groups?.['emoji'];
-
-            const emojiversion: string | undefined = groups?.['emojiversion'];
-
-            const type: string | undefined | 'component' | 'unqualified' | 'fully-qualified' | 'minimally-qualified' =
-                groups?.['type'];
-
-            switch (type) {
-                case 'fully-qualified':
-                    if (emoji === undefined || line.match(SKIN_TONE_VARIATION_DESC)) return;
-
-                    // @ts-ignore
+                if (emoji) {
                     dataByEmoji[emoji] = {
                         // @ts-ignore
                         name: null,
                         // @ts-ignore
                         slug: null,
-                        // @ts-ignore
                         group: currentGroup,
                         // @ts-ignore
                         unicode_version: null,
@@ -104,14 +95,9 @@ groupedEmojiData.split('\n').forEach((line) => {
                         // @ts-ignore
                         emoji_version: emojiversion,
                     };
-                    break;
-                case 'component':
-                    // @ts-ignore
-                    emojiComponents[slugify(desc)] = emoji;
-                    break;
-
-                default:
-                    break;
+                }
+            } else if (type === 'component') {
+                if (emoji) emojiComponents[slugify(desc || '')] = emoji;
             }
         }
     }
@@ -128,45 +114,37 @@ groupedEmojiData.split('\n').forEach((line) => {
 //
 const ORDERED_EMOJI_REGEX = /.+\s;\s(?<version>[0-9.]+)\s#\s(?<emoji>\S+)\s(?<name>[^:]+)(?::\s)?(?<desc>.+)?/;
 
-let currentEmoji: null | string = null;
+let currentEmoji: any = null;
 
 orderedEmojiData.split('\n').forEach((line) => {
     if (line.length === 0) return;
-
     const match = line.match(ORDERED_EMOJI_REGEX);
-    if (!match) return;
+    if (!match || match.groups === undefined) return;
 
-    const { groups } = match;
-
-    const name: string | undefined = groups?.['name'];
-    const desc: string | undefined = groups?.['desc'];
-    const emoji: string | undefined = groups?.['emoji'];
-    const version: string | undefined = groups?.['version'];
+    const { groups }: OrderedEmojiRegexMatchGroups = match;
+    const { version, emoji, name, desc }: OrderedEmojiRegexMatchTokens = groups;
 
     const isSkinToneVariation = desc && !!desc.match(SKIN_TONE_VARIATION_DESC);
     const fullName = desc && !isSkinToneVariation ? [name, desc].join(' ') : name;
-
-    if (!currentEmoji || !emoji) return;
-
     if (isSkinToneVariation) {
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].skin_tone_support = true;
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].skin_tone_support_unicode_version = version;
+        dataByEmoji[currentEmoji].skin_tone_support = true;
+        dataByEmoji[currentEmoji].skin_tone_support_unicode_version = version;
     } else {
         // Workaround for ordered data missing VARIATION_16 (smiling_face)
-        const emojiWithOptionalVariation16 = dataByEmoji[emoji as keyof typeof dataByEmoji]
-            ? emoji
-            : emoji + VARIATION_16;
-        const emojiEntry = dataByEmoji[emojiWithOptionalVariation16 as keyof typeof dataByEmoji];
-        if (!emojiEntry) {
-            if (Object.values(emojiComponents).includes(emoji)) return;
-            throw `${emoji} entry from emoji-order.txt match not found in emoji-group.txt`;
+        if (emoji) {
+            const emojiWithOptionalVariation16 = dataByEmoji[emoji] ? emoji : emoji + VARIATION_16;
+            const emojiEntry = dataByEmoji[emojiWithOptionalVariation16];
+            if (!emojiEntry) {
+                if (Object.values(emojiComponents).includes(emoji)) return;
+                throw `${emoji} entry from emoji-order.txt match not found in emoji-group.txt`;
+            }
+            currentEmoji = emojiWithOptionalVariation16;
+            orderedEmoji.push(currentEmoji);
+            dataByEmoji[currentEmoji].name = fullName || '';
+            dataByEmoji[currentEmoji].skin_tone_support = false;
+            dataByEmoji[currentEmoji].slug = slugify(fullName || '');
+            dataByEmoji[currentEmoji].unicode_version = version || '';
         }
-        currentEmoji = emojiWithOptionalVariation16;
-        orderedEmoji.push(currentEmoji);
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].name = fullName ?? '';
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].skin_tone_support = false;
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].slug = slugify(fullName ?? '');
-        dataByEmoji[currentEmoji as keyof typeof dataByEmoji].unicode_version = version ?? '';
     }
 });
 
@@ -178,53 +156,23 @@ for (const emoji of orderedEmoji) {
         dataByGroup.push({ name: group, slug: slugify(group), emojis: [] });
         groupIndex = dataByGroup.findIndex((element) => element.name === group);
     }
+
+    // @ts-ignore
     dataByGroup[groupIndex].emojis.push({
-        emoji,
-        skin_tone_support,
-        skin_tone_support_unicode_version,
         name,
         slug,
-        unicode_version,
+        emoji,
         emoji_version,
+        unicode_version,
+        skin_tone_support,
+        skin_tone_support_unicode_version,
     });
 }
 
-// {
-//   "😀": {
-//     "group": "Smileys & Emotion",
-//     "name": "grinning face",
-//     "slug": "grinning_face",
-//     "version": "6.1",
-//     "skin_tone_support": false
-//   },
-//   ...
-// }
 writeFileSync('./dist/emoji/data-by-emoji.json', JSON.stringify(dataByEmoji, null, 4));
 
-// {
-//   "Smileys & Emotion": [
-//     {
-//       "emoji": "😀",
-//       "skin_tone_support": false,
-//       "name": "grinning face",
-//       "slug": "grinning_face",
-//       "version": "6.1"
-//     },
-//   ],
-//   ...
-// }
 writeFileSync('./dist/emoji/data-by-group.json', JSON.stringify(dataByGroup, null, 4));
 
-// [
-//   "😀",
-//   "😃",
-//   ...
-// ]
 writeFileSync('./dist/emoji/data-ordered-emoji.json', JSON.stringify(orderedEmoji, null, 4));
 
-// {
-//   "light_skin_tone": "🏻",
-//   "medium_light_skin_tone": "🏼",
-//   ...
-// }
 writeFileSync('./dist/emoji/data-emoji-components.json', JSON.stringify(emojiComponents, null, 4));
