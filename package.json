@@ -4,7 +4,6 @@
     "version": "0.0.0",
     "scripts": {
         "graph": "nx graph",
-        "build:idx": "nx run api-unicode-server:build",
         "test": "nx run-many --target=test --projects=arr,fmt,fns,num,str,web,pry,bic,fic,bee,use --parallel=3",
         "build": "nx run-many --target=build --projects=arr,fmt,fns,num,str,web,pry,bic,fic,bee,use --parallel=3"
     },
