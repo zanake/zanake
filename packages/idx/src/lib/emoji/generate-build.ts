@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { readFileSync, writeFileSync } from 'fs';
-import { IDataByEmoji, IDataByGroup, IDataEmojiComponents } from '.';
+import { ICatalogue, IGroupings, IComponents } from '.';
 
 const VARIATION_16 = String.fromCodePoint(0xfe0f);
 const SKIN_TONE_VARIATION_DESC = /\sskin\stone(?:,|$)/;
 const orderedEmojiData = readFileSync('./dist/emoji/emoji-order.txt', 'utf-8');
 const groupedEmojiData = readFileSync('./dist/emoji/emoji-group.txt', 'utf-8');
 
-const orderedEmoji: string[] = [];
-const dataByEmoji: IDataByEmoji = {};
-const dataByGroup: IDataByGroup[] = [];
-const emojiComponents: IDataEmojiComponents = {};
+const INDEXED: string[] = [];
+const CATALOGUE: ICatalogue = {};
+const GROUPINGS: IGroupings[] = [];
+const COMPONENTS: IComponents = {};
 
 type EmojiRegexMatchGroups = {
     groups?: { [key: string]: string | undefined; type?: string; emoji?: string; desc?: string; emojiversion?: string };
@@ -82,7 +82,7 @@ groupedEmojiData.split('\n').forEach((line) => {
                 if (line.match(SKIN_TONE_VARIATION_DESC)) return;
 
                 if (emoji) {
-                    dataByEmoji[emoji] = {
+                    CATALOGUE[emoji] = {
                         // @ts-ignore
                         name: null,
                         // @ts-ignore
@@ -97,7 +97,7 @@ groupedEmojiData.split('\n').forEach((line) => {
                     };
                 }
             } else if (type === 'component') {
-                if (emoji) emojiComponents[slugify(desc || '')] = emoji;
+                if (emoji) COMPONENTS[slugify(desc || '')] = emoji;
             }
         }
     }
@@ -127,38 +127,38 @@ orderedEmojiData.split('\n').forEach((line) => {
     const isSkinToneVariation = desc && !!desc.match(SKIN_TONE_VARIATION_DESC);
     const fullName = desc && !isSkinToneVariation ? [name, desc].join(' ') : name;
     if (isSkinToneVariation) {
-        dataByEmoji[currentEmoji].skin_tone_support = true;
-        dataByEmoji[currentEmoji].skin_tone_support_unicode_version = version;
+        CATALOGUE[currentEmoji].skin_tone_support = true;
+        CATALOGUE[currentEmoji].skin_tone_support_unicode_version = version;
     } else {
         // Workaround for ordered data missing VARIATION_16 (smiling_face)
         if (emoji) {
-            const emojiWithOptionalVariation16 = dataByEmoji[emoji] ? emoji : emoji + VARIATION_16;
-            const emojiEntry = dataByEmoji[emojiWithOptionalVariation16];
+            const emojiWithOptionalVariation16 = CATALOGUE[emoji] ? emoji : emoji + VARIATION_16;
+            const emojiEntry = CATALOGUE[emojiWithOptionalVariation16];
             if (!emojiEntry) {
-                if (Object.values(emojiComponents).includes(emoji)) return;
+                if (Object.values(COMPONENTS).includes(emoji)) return;
                 throw `${emoji} entry from emoji-order.txt match not found in emoji-group.txt`;
             }
             currentEmoji = emojiWithOptionalVariation16;
-            orderedEmoji.push(currentEmoji);
-            dataByEmoji[currentEmoji].name = fullName || '';
-            dataByEmoji[currentEmoji].skin_tone_support = false;
-            dataByEmoji[currentEmoji].slug = slugify(fullName || '');
-            dataByEmoji[currentEmoji].unicode_version = version || '';
+            INDEXED.push(currentEmoji);
+            CATALOGUE[currentEmoji].name = fullName || '';
+            CATALOGUE[currentEmoji].skin_tone_support = false;
+            CATALOGUE[currentEmoji].slug = slugify(fullName || '');
+            CATALOGUE[currentEmoji].unicode_version = version || '';
         }
     }
 });
 
-for (const emoji of orderedEmoji) {
+for (const emoji of INDEXED) {
     const { group, skin_tone_support, skin_tone_support_unicode_version, name, slug, emoji_version, unicode_version } =
-        dataByEmoji[emoji];
-    let groupIndex = dataByGroup.findIndex((element) => element.name === group);
+        CATALOGUE[emoji];
+    let groupIndex = GROUPINGS.findIndex((element) => element.name === group);
     if (groupIndex === -1) {
-        dataByGroup.push({ name: group, slug: slugify(group), emojis: [] });
-        groupIndex = dataByGroup.findIndex((element) => element.name === group);
+        GROUPINGS.push({ name: group, slug: slugify(group), emojis: [] });
+        groupIndex = GROUPINGS.findIndex((element) => element.name === group);
     }
 
     // @ts-ignore
-    dataByGroup[groupIndex].emojis.push({
+    GROUPINGS[groupIndex].emojis.push({
         name,
         slug,
         emoji,
@@ -169,10 +169,12 @@ for (const emoji of orderedEmoji) {
     });
 }
 
-writeFileSync('./dist/emoji/data-by-emoji.json', JSON.stringify(dataByEmoji, null, 4));
 
-writeFileSync('./dist/emoji/data-by-group.json', JSON.stringify(dataByGroup, null, 4));
 
-writeFileSync('./dist/emoji/data-ordered-emoji.json', JSON.stringify(orderedEmoji, null, 4));
+writeFileSync('./dist/emoji/indexed.json', JSON.stringify(INDEXED, null, 4));
 
-writeFileSync('./dist/emoji/data-emoji-components.json', JSON.stringify(emojiComponents, null, 4));
+writeFileSync('./dist/emoji/groupings.json', JSON.stringify(GROUPINGS, null, 4));
+
+writeFileSync('./dist/emoji/catalogue.json', JSON.stringify(CATALOGUE, null, 4));
+
+writeFileSync('./dist/emoji/components.json', JSON.stringify(COMPONENTS, null, 4));

@@ -7,7 +7,7 @@ export interface IStats {
     total_without_skin_tone_variations?: number;
 }
 
-export interface IDataByEmoji {
+export interface ICatalogue {
     [key: string]: {
         name: string;
         slug: string;
@@ -19,7 +19,7 @@ export interface IDataByEmoji {
     };
 }
 
-export interface IDataByGroup {
+export interface IGroupings {
     name: string;
     slug: string;
     emojis: {
@@ -33,6 +33,6 @@ export interface IDataByGroup {
     }[];
 }
 
-export interface IDataEmojiComponents {
+export interface IComponents {
     [key: string]: string;
 }
