@@ -1,13 +1,10 @@
 {
     "name": "@zanake/idx",
     "version": "v0.0.40-beta",
-    "files": [
-        "data-by-emoji.json",
-        "data-by-group.json",
-        "data-ordered-emoji.json",
-        "data-emoji-components.json"
-    ],
     "description": "Static & usable JSON files fetched from \"official\" indexes, databases or sources",
+    "files": [
+        "dist/**/*"
+    ],
     "scripts": {
         "test": "ts-node index.spec.js",
         "fetch": "ts-node src/lib/emoji/fetch-unicode-data",

@@ -12,7 +12,9 @@
         "allowJs": true,
     },
     "files": [],
-    "include": [],
+    "include": [
+        "dist/**/*"
+    ],
     "references": [
         {
             "path": "./tsconfig.lib.json"
