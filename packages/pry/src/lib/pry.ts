@@ -1,6 +1,6 @@
-type Level = "log"|"info"|"warn"|"error"|"debug";
+type Level = "log" | "info" | "warn" | "error" | "debug" | "success";
 
-export interface Pry {level: Level,title: string,message: string, directory: string | null}
+export interface Pry { level: Level, title: string, message: string, directory?: string | null }
 
 /**
  * A logging utility for both the NodeJS & browser JavaScript environments
@@ -10,7 +10,7 @@ export interface Pry {level: Level,title: string,message: string, directory: str
  * @param {string} config.message - Detailed content for the log entry
  * @param {string|null} config.directory - Absolute path where your log files be created
  */
-export const logger = async ({level = 'log', title, message, directory = null}: Partial<Pry>) : Promise<void> => {
+export const logger = async ({ level = 'log', title, message, directory = null }: Partial<Pry>): Promise<void> => {
     const writer = typeof console[level] === "function"
         ? console[level]
         : console.log;
@@ -57,3 +57,42 @@ export const logger = async ({level = 'log', title, message, directory = null}: 
         }
     }
 };
+
+export const stdout = async ({ level = 'log', title, message }: Partial<Pry>): void => {
+    const date = new Date().toISOString();
+
+    let icon;
+    let head;
+    switch (level) {
+        case "log":
+            icon = "📌";
+            head = '\x1b[34m[LOG]\x1b[0m' // blue
+            break;
+        case "info":
+            icon = "🛟";
+            head = '\x1b[36m[INFO]\x1b[0m' // cyan
+            break;
+        case "warn":
+            icon = "❗";
+            head = '\x1b[33m[WARNING]\x1b[0m' // yellow
+            break;
+        case "error":
+            icon = "❌";
+            head = '\x1b[31m[ERROR]\x1b[0m' // red
+            break;
+        case "debug":
+            icon = "🐞";
+            head = '\x1b[35m[DEBUG]\x1b[0m' // magenta
+            break;
+        case "success":
+            icon = "✅";
+            head = '\x1b[32m[SUCCESS]\x1b[0m' // green
+            break;
+        default:
+            icon = "🚩";
+            head = '\x1b[38;5;202m[FLAG]\x1b[0m' // orange
+            break;
+    }
+
+    console.log(emoji, head, ` - [${date}]`, title, `\n${JSON.stringify(message, null, "....")}\n`);
+}
