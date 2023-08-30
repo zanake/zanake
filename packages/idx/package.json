@@ -1,6 +1,6 @@
 {
     "name": "@zanake/idx",
-    "version": "v0.0.42-beta",
+    "version": "v0.0.43-beta",
     "description": "Static & usable JSON files fetched from \"official\" indexes, databases or sources",
     "files": [
         "dist/**/*"

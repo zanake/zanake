@@ -1,16 +1,71 @@
 type Level = "log" | "info" | "warn" | "error" | "debug" | "success";
 
-export interface Pry { level: Level, title: string, message: string, directory?: string | null }
+export type Stdout = { level?: Level, title: string, message: string }
 
 /**
- * A logging utility for both the NodeJS & browser JavaScript environments
+ * A terminal logging utility for both the NodeJS & browser JavaScript environments
+ * 
+ * @param {Level} config.level - Importance of the information being logged
+ * @param {string} config.title - Headline or caption for the log entry
+ * @param {string} config.message - Detailed content for the log entry
+ */
+export const stdout = async ({ level = 'log', title, message }: Partial<Stdout>): void => {
+    const date = new Date().toISOString();
+
+    let icon;
+    let head;
+    switch (level) {
+        case "log":
+            icon = "📌";
+            // blue tag
+            head = '\x1b[34m[LOG]\x1b[0m';
+            break;
+        case "info":
+            icon = "🛟";
+            // cyan tag
+            head = '\x1b[36m[INFO]\x1b[0m';
+            break;
+        case "warn":
+            icon = "❗";
+            // yellow tag
+            head = '\x1b[33m[WARNING]\x1b[0m';
+            break;
+        case "error":
+            icon = "❌";
+            // red tag
+            head = '\x1b[31m[ERROR]\x1b[0m';
+            break;
+        case "debug":
+            icon = "🐞";
+            // magenta tag
+            head = '\x1b[35m[DEBUG]\x1b[0m';
+            break;
+        case "success":
+            icon = "✅";
+            // green tag
+            head = '\x1b[32m[SUCCESS]\x1b[0m';
+            break;
+        default:
+            icon = "🚩";
+            // orange tag
+            head = '\x1b[38;5;202m[FLAG]\x1b[0m';
+            break;
+    }
+
+    console.log(emoji, head, ` - [${date}]`, title, `\n${JSON.stringify(message, null, "....")}\n`);
+}
+
+export type Logger = { level: Omit<Level, "success">, title: string, message: string, directory?: string | null }
+
+/**
+ * A file logging utility for both the NodeJS & browser JavaScript environments
  * 
  * @param {Level} config.level - Importance of the information being logged
  * @param {string} config.title - Headline or caption for the log entry
  * @param {string} config.message - Detailed content for the log entry
  * @param {string|null} config.directory - Absolute path where your log files be created
  */
-export const logger = async ({ level = 'log', title, message, directory = null }: Partial<Pry>): Promise<void> => {
+export const logger = async ({ level = 'log', title, message, directory = null }: Partial<Logger>): Promise<void> => {
     const writer = typeof console[level] === "function"
         ? console[level]
         : console.log;
@@ -57,42 +112,3 @@ export const logger = async ({ level = 'log', title, message, directory = null }
         }
     }
 };
-
-export const stdout = async ({ level = 'log', title, message }: Partial<Pry>): void => {
-    const date = new Date().toISOString();
-
-    let icon;
-    let head;
-    switch (level) {
-        case "log":
-            icon = "📌";
-            head = '\x1b[34m[LOG]\x1b[0m' // blue
-            break;
-        case "info":
-            icon = "🛟";
-            head = '\x1b[36m[INFO]\x1b[0m' // cyan
-            break;
-        case "warn":
-            icon = "❗";
-            head = '\x1b[33m[WARNING]\x1b[0m' // yellow
-            break;
-        case "error":
-            icon = "❌";
-            head = '\x1b[31m[ERROR]\x1b[0m' // red
-            break;
-        case "debug":
-            icon = "🐞";
-            head = '\x1b[35m[DEBUG]\x1b[0m' // magenta
-            break;
-        case "success":
-            icon = "✅";
-            head = '\x1b[32m[SUCCESS]\x1b[0m' // green
-            break;
-        default:
-            icon = "🚩";
-            head = '\x1b[38;5;202m[FLAG]\x1b[0m' // orange
-            break;
-    }
-
-    console.log(emoji, head, ` - [${date}]`, title, `\n${JSON.stringify(message, null, "....")}\n`);
-}
