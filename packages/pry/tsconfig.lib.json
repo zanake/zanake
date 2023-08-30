@@ -3,8 +3,9 @@
     "compilerOptions": {
         "outDir": "../../dist/out-tsc",
         "declaration": true,
-        "types": ["node"]
+        "types": ["node"],
+        "composite": true
     },
-    "include": ["**/*.ts"],
+    "include": ["**/*.ts", "src/lib/pry.spec.js"],
     "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }
