@@ -1,7 +1,6 @@
 type Level = 'log' | 'info' | 'warn' | 'error' | 'debug' | 'success';
 
 export type Metadata = {
-    css: string;
     icon: string;
     ansi: { resetColour: string; foregroundColour: string; backgroundColour: string };
 };
@@ -19,49 +18,42 @@ const meta = (level: Level): Metadata => {
             // blue
             return {
                 icon: '📌',
-                css: 'border-radius: 2px; padding: 0 2px; background: rgba(0, 0, 255, 0.4)',
                 ansi: { resetColour, foregroundColour: '\x1b[34m', backgroundColour: '\x1b[44m' },
             };
         case 'info':
             // cyan
             return {
                 icon: '🛟',
-                css: 'border-radius: 2px; padding: 0 2px; background: rgba(0, 255, 255, 0.4)',
                 ansi: { resetColour, foregroundColour: '\x1b[36m', backgroundColour: '\x1b[46m' },
             };
         case 'warn':
             // yellow
             return {
                 icon: '❗',
-                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 255, 0, 0.4)',
                 ansi: { resetColour, foregroundColour: '\x1b[33m', backgroundColour: '\x1b[43m' },
             };
         case 'error':
             // red
             return {
                 icon: '❌',
-                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 0, 0, 0.4)',
                 ansi: { resetColour, foregroundColour: '\x1b[31m', backgroundColour: '\x1b[41' },
             };
         case 'debug':
             // magenta
             return {
                 icon: '🐞',
-                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 0, 255, 0.4)',
                 ansi: { resetColour, foregroundColour: '\x1b[35m', backgroundColour: '\x1b[45' },
             };
         case 'success':
             // green
             return {
                 icon: '✅',
-                css: 'border-radius: 2px; padding: 0 2px; background: rgba(0, 255, 0, 0.4)',
                 ansi: { resetColour, foregroundColour: '\x1b[32m', backgroundColour: '\x1b[42' },
             };
         default:
             // orange
             return {
                 icon: '🚩',
-                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 165, 0, 0.4)',
                 ansi: { resetColour, foregroundColour: '\x1b[38;5;202m', backgroundColour: '\x1b[48;5;202m' },
             };
     }
