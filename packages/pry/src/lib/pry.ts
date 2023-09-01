@@ -1,5 +1,72 @@
 type Level = 'log' | 'info' | 'warn' | 'error' | 'debug' | 'success';
 
+export type Metadata = {
+    css: string;
+    icon: string;
+    ansi: { resetColour: string; foregroundColour: string; backgroundColour: string };
+};
+
+const writer = (level: Level) =>
+    typeof console[level as Exclude<Level, 'success'>] === 'function'
+        ? console[level as Exclude<Level, 'success'>]
+        : console.log;
+
+const meta = (level: Level): Metadata => {
+    const resetColour = '\x1b[0m';
+
+    switch (level) {
+        case 'log':
+            // blue
+            return {
+                icon: '📌',
+                css: 'border-radius: 2px; padding: 0 2px; background: rgba(0, 0, 255, 0.4)',
+                ansi: { resetColour, foregroundColour: '\x1b[34m', backgroundColour: '\x1b[44m' },
+            };
+        case 'info':
+            // cyan
+            return {
+                icon: '🛟',
+                css: 'border-radius: 2px; padding: 0 2px; background: rgba(0, 255, 255, 0.4)',
+                ansi: { resetColour, foregroundColour: '\x1b[36m', backgroundColour: '\x1b[46m' },
+            };
+        case 'warn':
+            // yellow
+            return {
+                icon: '❗',
+                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 255, 0, 0.4)',
+                ansi: { resetColour, foregroundColour: '\x1b[33m', backgroundColour: '\x1b[43m' },
+            };
+        case 'error':
+            // red
+            return {
+                icon: '❌',
+                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 0, 0, 0.4)',
+                ansi: { resetColour, foregroundColour: '\x1b[31m', backgroundColour: '\x1b[41' },
+            };
+        case 'debug':
+            // magenta
+            return {
+                icon: '🐞',
+                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 0, 255, 0.4)',
+                ansi: { resetColour, foregroundColour: '\x1b[35m', backgroundColour: '\x1b[45' },
+            };
+        case 'success':
+            // green
+            return {
+                icon: '✅',
+                css: 'border-radius: 2px; padding: 0 2px; background: rgba(0, 255, 0, 0.4)',
+                ansi: { resetColour, foregroundColour: '\x1b[32m', backgroundColour: '\x1b[42' },
+            };
+        default:
+            // orange
+            return {
+                icon: '🚩',
+                css: 'border-radius: 2px; padding: 0 2px; background: rgba(255, 165, 0, 0.4)',
+                ansi: { resetColour, foregroundColour: '\x1b[38;5;202m', backgroundColour: '\x1b[48;5;202m' },
+            };
+    }
+};
+
 export type Stdout = { level?: Level; title: string; message: string };
 
 /**
@@ -11,51 +78,20 @@ export type Stdout = { level?: Level; title: string; message: string };
  */
 export const stdout = ({ level = 'log', title, message }: Partial<Stdout>): void => {
     const date = new Date().toISOString();
+    const func = writer(level);
 
-    let icon;
-    let head;
-    switch (level) {
-        case 'log':
-            icon = '📌';
-            // blue tag
-            head = '\x1b[34m[LOG]\x1b[0m';
-            break;
-        case 'info':
-            icon = '🛟';
-            // cyan tag
-            head = '\x1b[36m[INFO]\x1b[0m';
-            break;
-        case 'warn':
-            icon = '❗';
-            // yellow tag
-            head = '\x1b[33m[WARNING]\x1b[0m';
-            break;
-        case 'error':
-            icon = '❌';
-            // red tag
-            head = '\x1b[31m[ERROR]\x1b[0m';
-            break;
-        case 'debug':
-            icon = '🐞';
-            // magenta tag
-            head = '\x1b[35m[DEBUG]\x1b[0m';
-            break;
-        case 'success':
-            icon = '✅';
-            // green tag
-            head = '\x1b[32m[SUCCESS]\x1b[0m';
-            break;
-        default:
-            icon = '🚩';
-            // orange tag
-            head = '\x1b[38;5;202m[FLAG]\x1b[0m';
-            break;
-    }
+    const {
+        icon,
+        ansi: { resetColour, foregroundColour, backgroundColour },
+    } = meta(level);
 
-    console.log(icon, head, ` - [${date}]`, title, `\n${JSON.stringify(message, null, '....')}\n`);
+    func(
+        `${icon} ${backgroundColour} ${level} ${resetColour} [${date}] ${foregroundColour}${title}${resetColour}`,
+        `\n${JSON.stringify(message, null, '....')}\n`
+    );
 };
 
-export type Logger = { level: Exclude<Level, 'success'>; title: string; message: string; directory?: string | null };
+export type Logger = { level: Level; title: string; message: string; directory?: string | null };
 
 /**
  * A file logging utility for both the NodeJS & browser JavaScript environments
@@ -66,33 +102,9 @@ export type Logger = { level: Exclude<Level, 'success'>; title: string; message:
  * @param {string|null} config.directory - Absolute path where your log files be created
  */
 export const logger = async ({ level = 'log', title, message, directory = null }: Partial<Logger>): Promise<void> => {
-    const writer = typeof console[level] === 'function' ? console[level] : console.log;
-
     const date = new Date().toISOString();
 
-    let emoji;
-    switch (level) {
-        case 'log':
-            emoji = '📌';
-            break;
-        case 'info':
-            emoji = '🛟';
-            break;
-        case 'warn':
-            emoji = '❗';
-            break;
-        case 'error':
-            emoji = '❌';
-            break;
-        case 'debug':
-            emoji = '🐞';
-            break;
-        default:
-            emoji = '🚩';
-            break;
-    }
-
-    writer(`${emoji} [${date}] ${title}`, `\n${JSON.stringify(message, null, '....')}\n`);
+    const { icon } = meta(level);
 
     if (directory !== null) {
         try {
@@ -103,10 +115,14 @@ export const logger = async ({ level = 'log', title, message, directory = null }
 
             const stream = handle.createWriteStream();
 
-            stream.write(`${emoji} [${date}] ${title}\n`);
+            stream.write(`${icon} [${date}] ${title}\n`);
             stream.end(`${JSON.stringify(message, null, '....')}\n\n`);
         } catch (error) {
             console.error(error);
         }
+    } else {
+        const func = writer(level);
+
+        func(`${icon} [${date}] ${title}`, `\n${JSON.stringify(message, null, '....')}\n`);
     }
 };

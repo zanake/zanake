@@ -1,5 +1,10 @@
 {
+    "license": "MIT",
+    "type": "commonjs",
     "name": "@zanake/pry",
-    "version": "v0.0.47-beta",
-    "type": "commonjs"
+    "version": "v0.0.50-beta",
+    "description": "A JavaScript utility that provides formatted file & standard output application logs",
+    "contributors": [
+        "Howard Mnengwa <howard@mnengwa.com> (http://github.com/mnengwa)"
+    ]
 }
