@@ -78,8 +78,12 @@ export const stdout = ({ level = 'log', title, message }: Partial<Stdout>): void
     } = meta(level);
 
     func(
-        `${icon} ${backgroundColour} ${level} ${resetColour} [${date}] ${foregroundColour}${title}${resetColour}`,
-        `\n${JSON.stringify(message, null, '....')}\n`
+        icon,
+        `${backgroundColour} ${level} ${resetColour}`,
+        `[${date}]`,
+        `${foregroundColour}${title}${resetColour}`,
+        `\n>`,
+        `${JSON.stringify(message, null, '....')}`
     );
 };
 
@@ -115,6 +119,6 @@ export const logger = async ({ level = 'log', title, message, directory = null }
     } else {
         const func = writer(level);
 
-        func(`${icon} [${date}] ${title}`, `\n${JSON.stringify(message, null, '....')}\n`);
+        func(`${icon} [${date}] ${title}\n`, `${JSON.stringify(message, null, '....')}\n\n`);
     }
 };
