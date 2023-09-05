@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import type { Logger } from './pry';
-import { logger as pry } from './pry';
+import { meta, writer, logger as pry } from './pry';
 
 const logs = [
     { level: 'log', title: 'Hi', message: 'Hello, World' },
@@ -9,6 +9,7 @@ const logs = [
     { level: 'warn', title: 'Ignored issue', message: "Houston, we've had a problem here." },
     { level: 'error', title: 'App failure', message: 'Mayday! Mayday! We are going down.' },
     { level: 'debug', title: 'Blocker bug', message: "Not what's happening here." },
+    { level: 'critical', title: 'Critical failure', message: 'Huston we have a problem...' },
 ];
 
 const mkdir = async (directory: string) => await fs.mkdir(path.resolve(process.cwd(), directory), { recursive: true });

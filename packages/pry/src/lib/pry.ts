@@ -1,54 +1,54 @@
-type Level = 'log' | 'info' | 'warn' | 'error' | 'debug' | 'success';
+type Level = 'log' | 'info' | 'warn' | 'error' | 'debug' | 'success' | string;
 
 export type Metadata = {
     icon: string;
     ansi: { resetColour: string; foregroundColour: string; backgroundColour: string };
 };
 
-const writer = (level: Level) =>
-    typeof console[level as Exclude<Level, 'success'>] === 'function'
-        ? console[level as Exclude<Level, 'success'>]
+export const writer = (level: Level) =>
+    typeof console[level as Exclude<Level, 'success' | string>] === 'function'
+        ? console[level as Exclude<Level, 'success' | string>]
         : console.log;
 
-const meta = (level: Level): Metadata => {
+export const meta = (level: undefined | Level): Metadata => {
     const resetColour = '\x1b[0m';
 
     switch (level) {
         case 'log':
             // blue
             return {
-                icon: '📌',
+                icon: '⚡️',
                 ansi: { resetColour, foregroundColour: '\x1b[34m', backgroundColour: '\x1b[44m' },
             };
         case 'info':
             // cyan
             return {
-                icon: '🛟',
+                icon: '💡',
                 ansi: { resetColour, foregroundColour: '\x1b[36m', backgroundColour: '\x1b[46m' },
             };
         case 'warn':
             // yellow
             return {
-                icon: '❗',
+                icon: '🚧',
                 ansi: { resetColour, foregroundColour: '\x1b[33m', backgroundColour: '\x1b[43m' },
             };
         case 'error':
             // red
             return {
                 icon: '❌',
-                ansi: { resetColour, foregroundColour: '\x1b[31m', backgroundColour: '\x1b[41' },
+                ansi: { resetColour, foregroundColour: '\x1b[31m', backgroundColour: '\x1b[41m' },
             };
         case 'debug':
             // magenta
             return {
                 icon: '🐞',
-                ansi: { resetColour, foregroundColour: '\x1b[35m', backgroundColour: '\x1b[45' },
+                ansi: { resetColour, foregroundColour: '\x1b[35m', backgroundColour: '\x1b[45m' },
             };
         case 'success':
             // green
             return {
                 icon: '✅',
-                ansi: { resetColour, foregroundColour: '\x1b[32m', backgroundColour: '\x1b[42' },
+                ansi: { resetColour, foregroundColour: '\x1b[32m', backgroundColour: '\x1b[42m' },
             };
         default:
             // orange
@@ -68,9 +68,9 @@ export type Stdout = { level?: Level; title: string; message: string };
  * @param {string} config.title - Headline or caption for the log entry
  * @param {string} config.message - Detailed content for the log entry
  */
-export const stdout = ({ level = 'log', title, message }: Partial<Stdout>): void => {
+export const stdout = ({ level, title, message }: Partial<Stdout>): void => {
     const date = new Date().toISOString();
-    const func = writer(level);
+    const func = console.log;
 
     const {
         icon,
@@ -78,9 +78,14 @@ export const stdout = ({ level = 'log', title, message }: Partial<Stdout>): void
     } = meta(level);
 
     func(
-        `${icon} ${backgroundColour} ${level} ${resetColour} [${date}] ${foregroundColour}${title}${resetColour}`,
+        icon,
+        `${backgroundColour}${level}${resetColour}`,
+        `[${date}]`,
+        `${foregroundColour}${title}${resetColour}`,
         `\n${JSON.stringify(message, null, '....')}\n`
     );
+
+    return;
 };
 
 export type Logger = { level: Level; title: string; message: string; directory?: string | null };
