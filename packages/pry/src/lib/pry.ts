@@ -120,6 +120,6 @@ export const logger = async ({ level = 'log', title, message, directory = null }
     } else {
         const func = writer(level);
 
-        func(`${icon} [${date}] ${title}`, `\n${JSON.stringify(message, null, '....')}\n`);
+        func(`${icon} [${date}] ${title}\n`, `${JSON.stringify(message, null, '....')}\n\n`);
     }
 };
