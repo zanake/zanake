@@ -16,8 +16,6 @@
         "baseUrl": ".",
         "paths": {
             "@zanake/arr": ["packages/arr/src/index.ts"],
-            "@zanake/bic": ["packages/bic/src/index.ts"],
-            "@zanake/fic": ["packages/fic/src/index.ts"],
             "@zanake/fmt": ["packages/fmt/src/index.ts"],
             "@zanake/fns": ["packages/fns/src/index.ts"],
             "@zanake/idx": ["packages/idx/src/index.ts"],
@@ -25,7 +23,6 @@
             "@zanake/obj": ["packages/obj/src/index.ts"],
             "@zanake/pry": ["packages/pry/src/index.ts"],
             "@zanake/str": ["packages/str/src/index.ts"],
-            "@zanake/use": ["packages/use/src/index.ts"],
             "@zanake/web": ["packages/web/src/index.ts"]
         }
     },
